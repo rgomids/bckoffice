@@ -14,7 +14,7 @@ help:
 	@echo "  lint       - go vet ./..."
 	@echo "  build      - docker-compose build"
 
-dev: up logs
+dev: down up logs
 
 up:
 	docker-compose -f infra/docker-compose.yml up -d --build
@@ -37,15 +37,21 @@ test:
 lint:
 	cd backend && go vet ./cmd/server/main.go
 
-build:
-	docker-compose -f infra/docker-compose.yml build
+build: build-be	build-fe
 
 migrate-up:
 	docker run --rm \
-	  --network rcm-backoffice_default \  # rede criada pelo docker-compose
-	  -v $(PWD)/migration:/migrations \
-	  --env-file .env \
-	  migrate/migrate:4.17.2 \
-	  -path=/migrations \
-	  -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
-	  up
+		--network rcm-backoffice_default \
+		-v $(PWD)/migration:/migrations \
+		--env-file .env \
+		migrate/migrate:4.17.2 \
+		-path=/migrations \
+		-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
+		up
+
+build-be:
+	docker buildx build -t rcm.backoffice/backend:latest -f backend/Dockerfile backend
+
+build-fe:
+	docker buildx build -t rcm.backoffice/frontend:latest -f frontend/Dockerfile frontend
+
