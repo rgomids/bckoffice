@@ -32,7 +32,9 @@ jobs:
           go vet ./cmd/server/main.go
 
       - name: Run tests
-        run: go test ./cmd/server/main.go
+        run: |
+          cd backend
+          go test ./cmd/server/main.go
 
   frontend:
     name: Frontend • Next.js build
