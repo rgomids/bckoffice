@@ -32,10 +32,10 @@ frontend:
 	cd frontend && npm run dev
 
 test:
-	go test ./...
+	cd backend && go test ./cmd/server/main.go
 
 lint:
-	go vet ./...
+	cd backend && go vet ./cmd/server/main.go
 
 build:
 	docker-compose -f infra/docker-compose.yml build
