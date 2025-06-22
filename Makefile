@@ -39,3 +39,13 @@ lint:
 
 build:
 	docker-compose -f infra/docker-compose.yml build
+
+migrate-up:
+	docker run --rm \
+	  --network rcm-backoffice_default \  # rede criada pelo docker-compose
+	  -v $(PWD)/migration:/migrations \
+	  --env-file .env \
+	  migrate/migrate:4.17.2 \
+	  -path=/migrations \
+	  -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
+	  up
