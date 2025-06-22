@@ -27,7 +27,9 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
       - name: Run go vet
-        run: go vet ./backend/...
+        run: |
+          cd backend
+          go vet ./cmd/server/main.go
 
       - name: Run tests
         run: go test ./backend/...

@@ -14,6 +14,7 @@
 | **Deployer** | `infra/docker-compose.yml` | Fazer `docker-compose pull && up -d` em staging/produção. |
 | **ObservabilityWatcher** | `infra/observability.yml` | Subir stack Prometheus/Grafana e validar dashboards. |
 | **BackupAgent** | `infra/cron/pg_dump.sh` | Executar backup diário do banco e enviar para bucket S3-compatível. |
+| **CI** | `.github/workflows/ci.yml` | Rodar `go vet`/testes e build do frontend em cada push. |
 
 ### Boas práticas para novos agentes
 
