@@ -8,9 +8,9 @@
 | Agente | Diretório / entrypoint | Responsabilidade principal |
 |--------|-----------------------|----------------------------|
 | **CodexAssistant** | – | Recebe prompts curtos e gera código ou shell-scripts conforme as convenções deste repositório. |
-| **BackendBuilder** | `backend/` – `make build` | Compilar o binário Go (multi-stage), rodar `go vet` e testes de unidade. |
-| **FrontendBuilder** | `frontend/` – `npm run build` | Gerar artefatos Next.js para produção e verificar ESLint/TypeScript. |
-| **DBMigrator** | `migration/` – comando `migrate` | Aplicar e versionar migrações SQL no PostgreSQL. |
+| **BackendBuilder** | `backend/` – `make build-be` | Compilar o binário Go (multi-stage), rodar `go vet` e testes de unidade. |
+| **FrontendBuilder** | `frontend/` – `make build-fe` | Gerar artefatos Next.js para produção e verificar ESLint/TypeScript. |
+| **DBMigrator** | `migrations/` – `make migrate-*` | Criar e aplicar migrações SQL no PostgreSQL. |
 | **Deployer** | `infra/docker-compose.yml` | Fazer `docker-compose pull && up -d` em staging/produção. |
 | **ObservabilityWatcher** | `infra/observability.yml` | Subir stack Prometheus/Grafana e validar dashboards. |
 | **BackupAgent** | `infra/cron/pg_dump.sh` | Executar backup diário do banco e enviar para bucket S3-compatível. |

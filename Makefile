@@ -20,6 +20,11 @@ help:
 	@echo "  test       - go test ./..."
 	@echo "  lint       - go vet ./..."
 	@echo "  build      - docker-compose build"
+	@echo "  build-be   - build da imagem backend"
+	@echo "  build-fe   - build da imagem frontend"
+	@echo "  migrate-create - cria nova migration (name=...)"
+	@echo "  migrate-up - aplica todas as migrations"
+	@echo "  migrate-down - desfaz migrations (mnum=1)"
 
 dev: down up logs
 
