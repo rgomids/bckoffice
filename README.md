@@ -11,7 +11,7 @@ tanto em desenvolvimento quanto em produção.
 - Docker + Docker Compose
 - Go 1.22 (para desenvolvimento backend)
 - Node 20 (para desenvolvimento frontend)
-- Make (opcional) para atalhos
+ - Make (opcional) para atalhos — rode `make help` para listar comandos
 
 ## Subir em desenvolvimento
 
@@ -32,7 +32,7 @@ docker-compose -f infra/docker-compose.yml up -d --build
 backend/   # código Go (cmd, internal, pkg)
 frontend/  # Next.js + Tailwind + HeadlessUI
 infra/     # docker-compose, observability
-migration/ # scripts SQL (golang-migrate)
+migrations/ # scripts SQL (golang-migrate)
 docs/      # documentação complementar
 ```
 
@@ -40,12 +40,15 @@ docs/      # documentação complementar
 
 ## Comandos úteis
 
-| Ação              | Comando                 |
-| ----------------- | ----------------------- |
-| Testes backend    | `go test ./...`         |
-| Lint frontend     | `npm run lint`          |
-| Build backend     | `make build` (em breve) |
-| Atualizar deps Go | `go get -u`             |
+| Ação               | Comando                                   |
+| ------------------ | ------------------------------------------ |
+| Testes backend     | `make test`                                |
+| Lint backend       | `make lint`                                |
+| Lint frontend      | `npm run lint`                             |
+| Build imagens      | `make build`                               |
+| Criar migration    | `make migrate-create name=exemplo`         |
+| Aplicar migrations | `make migrate-up`                          |
+| Desfazer migrations| `make migrate-down mnum=1`                 |
 
 ---
 
