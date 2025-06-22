@@ -49,6 +49,7 @@ docs/      # documentação complementar
 | Criar migration    | `make migrate-create name=exemplo`         |
 | Aplicar migrations | `make migrate-up`                          |
 | Desfazer migrations| `make migrate-down mnum=1`                 |
+| Forçar versão      | `make migrate-up-force version=<N>`        |
 
 ---
 
