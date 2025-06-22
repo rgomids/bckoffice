@@ -55,6 +55,7 @@ migrate-create:
 		--source file:///migrations \
 		-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
 		create -ext sql -dir /migrations ${name}
+		sudo chown "$(USER)":"$(USER)" -R $(PWD)/migrations
 
 migrate-up:
 	docker run --rm \
@@ -75,6 +76,16 @@ migrate-down:
 		--source file:///migrations \
 		-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
 		down $(mnum)
+
+migrate-up-force:
+	docker run --rm \
+		--network rcm.backoffice.network \
+		-v $(PWD)/migrations:/migrations \
+		--env-file .env \
+		migrate/migrate:4 \
+		--source file:///migrations \
+		-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
+		force $(version)
 
 build-be:
 	docker buildx build -t rcm.backoffice/backend:latest -f backend/Dockerfile backend
