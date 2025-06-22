@@ -41,7 +41,7 @@ build: build-be	build-fe
 
 migrate-up:
 	docker run --rm \
-		--network rcm-backoffice_default \
+		--network rcm.backoffice.network \
 		-v $(PWD)/migration:/migrations \
 		--env-file .env \
 		migrate/migrate:4.17.2 \
