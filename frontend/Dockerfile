@@ -15,11 +15,11 @@ RUN npm run build
 # --- run stage ---
 FROM node:20-alpine
 WORKDIR /app
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./
-RUN npm install --production --frozen-lockfile
+RUN npm install --development --frozen-lockfile
 
 EXPOSE 3000
 CMD ["npm", "start"]
