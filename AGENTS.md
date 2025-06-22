@@ -22,5 +22,5 @@
 2. **Logs claros** – prefixar saídas com o nome do agente.  
 3. **Idempotência** – rodar o agente duas vezes não deve quebrar o estado.  
 4. **Falha rápida** – exit code ≠ 0 e stack-trace legível.  
-5. **Documentação** – atualizar esta tabela ao adicionar ou alterar agente.
+5. **Documentação** – atualizar esta tabela ao adicionar ou alterar agente, atualizar README.md e AGENTS.md sempre que necessário
 

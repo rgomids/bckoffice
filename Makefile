@@ -1,5 +1,12 @@
 # Makefile — atalhos para o RCM Backoffice
 
+mnum ?= 1
+
+ifneq (,$(wildcard .env))
+  include .env
+  export
+endif
+
 .PHONY: help dev up down logs backend frontend test lint build
 
 help:
@@ -39,15 +46,35 @@ lint:
 
 build: build-be	build-fe
 
+migrate-create:
+	docker run --rm \
+		--network rcm.backoffice.network \
+		-v $(PWD)/migrations:/migrations \
+		--env-file .env \
+		migrate/migrate:4 \
+		--source file:///migrations \
+		-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
+		create -ext sql -dir /migrations ${name}
+
 migrate-up:
 	docker run --rm \
 		--network rcm.backoffice.network \
-		-v $(PWD)/migration:/migrations \
+		-v $(PWD)/migrations:/migrations \
 		--env-file .env \
-		migrate/migrate:4.17.2 \
-		-path=/migrations \
+		migrate/migrate:4 \
+		--source file:///migrations \
 		-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
 		up
+
+migrate-down:
+	docker run --rm \
+		--network rcm.backoffice.network \
+		-v $(PWD)/migrations:/migrations \
+		--env-file .env \
+		migrate/migrate:4 \
+		--source file:///migrations \
+		-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
+		down $(mnum)
 
 build-be:
 	docker buildx build -t rcm.backoffice/backend:latest -f backend/Dockerfile backend
