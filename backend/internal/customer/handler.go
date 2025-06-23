@@ -26,6 +26,11 @@ type handler struct {
 	validate *validator.Validate
 }
 
+// @Summary      Lista clientes
+// @Tags         customers
+// @Security     BearerAuth
+// @Success      200  {array}  Customer
+// @Router       /customers [get]
 func (h handler) list(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	customers, err := h.repo.FindAll(r.Context())
@@ -36,6 +41,11 @@ func (h handler) list(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(customers)
 }
 
+// @Summary      Cria cliente
+// @Tags         customers
+// @Security     BearerAuth
+// @Success      201  {object}  Customer
+// @Router       /customers [post]
 func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -94,6 +104,11 @@ func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(c)
 }
 
+// @Summary      Atualiza cliente
+// @Tags         customers
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /customers/{id} [put]
 func (h handler) update(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -158,6 +173,11 @@ func (h handler) update(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// @Summary      Remove cliente
+// @Tags         customers
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /customers/{id} [delete]
 func (h handler) remove(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if err := h.repo.SoftDelete(r.Context(), id); err != nil {

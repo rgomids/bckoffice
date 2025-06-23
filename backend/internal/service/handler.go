@@ -41,6 +41,11 @@ type UpdateServiceInput struct {
 	IsActive    bool    `json:"is_active"`
 }
 
+// @Summary      Lista servicos
+// @Tags         services
+// @Security     BearerAuth
+// @Success      200  {array}  Service
+// @Router       /services [get]
 func (h handler) list(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	services, err := h.repo.FindAll(r.Context())
@@ -51,6 +56,11 @@ func (h handler) list(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(services)
 }
 
+// @Summary      Cria servico
+// @Tags         services
+// @Security     BearerAuth
+// @Success      201  {object}  Service
+// @Router       /services [post]
 func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -85,6 +95,11 @@ func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(s)
 }
 
+// @Summary      Atualiza servico
+// @Tags         services
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /services/{id} [put]
 func (h handler) update(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -122,6 +137,11 @@ func (h handler) update(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// @Summary      Remove servico
+// @Tags         services
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /services/{id} [delete]
 func (h handler) remove(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if err := h.repo.SoftDelete(r.Context(), id); err != nil {

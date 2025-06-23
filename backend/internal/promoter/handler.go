@@ -43,6 +43,11 @@ type UpdatePromoterInput struct {
 	BankAccount json.RawMessage `json:"bank_account"`
 }
 
+// @Summary      Lista promotores
+// @Tags         promoters
+// @Security     BearerAuth
+// @Success      200  {array}  Promoter
+// @Router       /promoters [get]
 func (h handler) list(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	promoters, err := h.repo.FindAll(r.Context())
@@ -53,6 +58,11 @@ func (h handler) list(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(promoters)
 }
 
+// @Summary      Cria promotor
+// @Tags         promoters
+// @Security     BearerAuth
+// @Success      201  {object}  Promoter
+// @Router       /promoters [post]
 func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -88,6 +98,11 @@ func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(p)
 }
 
+// @Summary      Atualiza promotor
+// @Tags         promoters
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /promoters/{id} [put]
 func (h handler) update(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -126,6 +141,11 @@ func (h handler) update(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// @Summary      Remove promotor
+// @Tags         promoters
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /promoters/{id} [delete]
 func (h handler) remove(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if err := h.repo.SoftDelete(r.Context(), id); err != nil {

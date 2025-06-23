@@ -1,3 +1,12 @@
+// @title        RCM Backoffice API
+// @version      0.1
+// @description  Endpoints do backoffice RCM Tech.
+// @host         localhost:8080
+// @BasePath     /
+// @schemes      http
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 package main
 
 import (
@@ -6,9 +15,11 @@ import (
 	"os"
 
 	_ "github.com/lib/pq"
+	_ "github.com/smithl4b/rcm.backoffice/docs"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
+	httpSwagger "github.com/swaggo/http-swagger"
 
 	"github.com/smithl4b/rcm.backoffice/internal/audit"
 	"github.com/smithl4b/rcm.backoffice/internal/auth"
@@ -40,6 +51,7 @@ func main() {
 	r := chi.NewRouter()
 	auditMw := audit.NewAuditMiddleware(auditRepo, geoSvc)
 	r.Use(auditMw)
+	r.Get("/docs/*", httpSwagger.WrapHandler)
 
 	// rota publica de login
 	auth.RegisterRoutes(r, authRepo)
@@ -60,6 +72,10 @@ func main() {
 	})
 
 	// rota simples de health-check
+	// @Summary      Health check
+	// @Tags         status
+	// @Success      200  {string}  string  "ok"
+	// @Router       /healthz [get]
 	r.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte("ok"))
 	})
