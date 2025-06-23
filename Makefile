@@ -27,9 +27,8 @@ help:
 	@echo "  migrate-up - aplica todas as migrations"
 	@echo "  migrate-down - desfaz migrations (mnum=1)"
 	@echo "  migrate-up-force - forca versao da migration (version=...)"
-dev:
-                docker-compose -f infra/docker-compose.yml up -d --build
-                docker-compose -f infra/docker-compose.yml logs -f
+dev: down up logs
+
 prod:
                 docker-compose -f infra/docker-compose.yml.prod up -d
 up:
