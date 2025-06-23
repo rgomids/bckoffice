@@ -5,6 +5,15 @@ definitions:
       token:
         type: string
     type: object
+  auth.CredentialsInput:
+    properties:
+      email:
+        example: admin@example.com
+        type: string
+      password:
+        example: admin123
+        type: string
+    type: object
   contract.Contract:
     properties:
       created_at:
@@ -264,6 +273,17 @@ paths:
       - customers
   /login:
     post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Credenciais de login
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/auth.CredentialsInput'
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
