@@ -18,6 +18,7 @@ import (
 	_ "github.com/smithl4b/rcm.backoffice/docs"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	"github.com/jmoiron/sqlx"
 	httpSwagger "github.com/swaggo/http-swagger"
 
@@ -49,6 +50,14 @@ func main() {
 	geoSvc := audit.NewHttpGeoService()
 
 	r := chi.NewRouter()
+	corsMw := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		ExposedHeaders:   []string{"Location"},
+		AllowCredentials: true,
+	})
+	r.Use(corsMw.Handler)
 	auditMw := audit.NewAuditMiddleware(auditRepo, geoSvc)
 	r.Use(auditMw)
 	r.Get("/docs/*", httpSwagger.WrapHandler)
