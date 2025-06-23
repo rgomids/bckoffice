@@ -125,6 +125,16 @@ func (r *PostgresRepository) Update(ctx context.Context, c *Customer, addrs []Ad
 // SoftDelete marca um cliente como removido.
 func (r *PostgresRepository) SoftDelete(ctx context.Context, id string) error {
 	const q = `UPDATE customers SET deleted_at=now() WHERE id=$1 AND deleted_at IS NULL`
-	_, err := r.db.ExecContext(ctx, q, id)
-	return err
+	res, err := r.db.ExecContext(ctx, q, id)
+	if err != nil {
+		return err
+	}
+	affected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if affected == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
 }
