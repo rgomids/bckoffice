@@ -18,6 +18,7 @@ func RegisterRoutes(r chi.Router, repo Repository) {
 	r.Get("/customers", h.list)
 	r.Post("/customers", h.create)
 	r.Put("/customers/{id}", h.update)
+	r.Delete("/customers/{id}", h.remove)
 }
 
 type handler struct {
@@ -154,5 +155,18 @@ func (h handler) update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h handler) remove(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	if err := h.repo.SoftDelete(r.Context(), id); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 	w.WriteHeader(http.StatusNoContent)
 }
