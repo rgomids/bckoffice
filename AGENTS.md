@@ -26,4 +26,5 @@
 6. **Revisão de código** – ao propor modificações em arquivos, analisar o trecho alterado para identificar possíveis melhorias ou riscos antes de aplicar a mudança.
 7. **Testes de unidade** – sempre criar e rodar testes unitários para qualquer alteração de código.
 8. **Formatação** – utilizar ferramentas de formatação (ex.: `gofmt`, `prettier`) para garantir a qualidade e consistência do código.
+9. **Gofmt obrigatório** – antes de realizar commits, execute `gofmt -w .` dentro do diretório `backend/` para manter o código Go devidamente formatado.
 
