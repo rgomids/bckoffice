@@ -3,6 +3,7 @@
 /pkg/
 /dist/
 /coverage.out
+backend/tmp/main
 
 # --- Node / Next.js ---
 node_modules/
