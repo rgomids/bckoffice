@@ -17,8 +17,8 @@ help:
 		@echo "  logs       - docker-compose logs -f"
 	@echo "  backend    - go run ./backend/cmd/server"
 	@echo "  frontend   - (cd frontend && npm run dev)"
-	@echo "  test       - (cd backend && go test ./cmd/server/main.go)"
-	@echo "  lint       - (cd backend && go vet ./cmd/server/main.go)"
+	@echo "  test       - (cd backend && go test ./...)"
+	@echo "  lint       - (cd backend && go vet ./...)"
 	@echo "  build      - docker-compose build"
 	@echo "  build-be   - build da imagem backend"
 	@echo "  build-fe   - build da imagem frontend"
@@ -38,9 +38,9 @@ backend:
 frontend:
 		cd frontend && npm run dev
 test:
-		cd backend && go test ./cmd/server/main.go
+		cd backend && go test ./...
 lint:
-		cd backend && go vet ./cmd/server/main.go
+		cd backend && go vet ./...
 build: build-be	build-fe
 migrate-create:
 		docker run --rm \
