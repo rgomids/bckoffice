@@ -24,6 +24,16 @@ docker-compose -f infra/docker-compose.yml up -d --build
 * **Backend**:  [http://localhost:8080/healthz](http://localhost:8080/healthz)
 * **Postgres**: `postgres://rcm:rcm_pass@localhost:5432/rcm_backoffice`
 
+## Observabilidade
+
+```bash
+docker-compose -f infra/observability.yml up -d
+```
+
+Acesse:
+- Prometheus → <http://localhost:9090>
+- Grafana    → <http://localhost:3001>  (admin / admin)
+
 ---
 
 ## Estrutura de pastas
