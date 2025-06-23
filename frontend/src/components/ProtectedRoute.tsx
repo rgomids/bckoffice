@@ -1,22 +1,26 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getToken } from "@/hooks/useAuth";
 
 interface Props {
-  children: ReactNode;
   roles?: string[];
 }
 
-function parseJwt(token: string): any {
+interface JwtPayload {
+  role?: string;
+  [key: string]: unknown;
+}
+
+function parseJwt(token: string): JwtPayload | null {
   try {
     return JSON.parse(atob(token.split(".")[1]));
   } catch {
     return null;
   }
 }
-export default function ProtectedRoute({ children, roles }: Props) {
+export default function ProtectedRoute({ children, roles }: PropsWithChildren<Props>) {
   const router = useRouter();
 
   useEffect(() => {
