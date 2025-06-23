@@ -94,6 +94,21 @@ docker-compose up -d
 
 Opcional: crie o secret `GHCR_PAT` se preferir token permanente.
 
+## Deploy automático
+
+Crie os secrets `DEPLOY_HOST`, `DEPLOY_USER` e `DEPLOY_SSH_KEY` no GitHub.
+O servidor de destino deve possuir Docker e docker-compose, além do diretório
+`/opt/rcm-backoffice/` com permissão para o usuário configurado.
+
+Ao finalizar o workflow **Build & Push Images** com sucesso, o job
+**Deploy to Production** copia a pasta `infra/` via SSH e reinicia os
+containers em produção.
+
+Para testar manualmente:
+1. Realize merge na branch `main`.
+2. Aguarde o sucesso do workflow **Build & Push Images**.
+3. Verifique se o job **Deploy to Production** renovou os containers no host.
+
 ---
 
 ## Licença
