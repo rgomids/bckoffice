@@ -1,7 +1,9 @@
 package service
 
 import (
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -15,6 +17,8 @@ func RegisterRoutes(r chi.Router, repo Repository) {
 	h := handler{repo: repo, validate: validator.New()}
 	r.Get("/services", h.list)
 	r.Post("/services", h.create)
+	r.Put("/services/{id}", h.update)
+	r.Delete("/services/{id}", h.remove)
 }
 
 type handler struct {
@@ -23,6 +27,14 @@ type handler struct {
 }
 
 type createServiceInput struct {
+	Name        string  `json:"name" validate:"required"`
+	Description string  `json:"description"`
+	BasePrice   float64 `json:"base_price" validate:"gte=0"`
+	IsActive    bool    `json:"is_active"`
+}
+
+// UpdateServiceInput define o payload para atualizacao de servicos.
+type UpdateServiceInput struct {
 	Name        string  `json:"name" validate:"required"`
 	Description string  `json:"description"`
 	BasePrice   float64 `json:"base_price" validate:"gte=0"`
@@ -71,4 +83,54 @@ func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Location", "/services/"+s.ID)
 	w.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(w).Encode(s)
+}
+
+func (h handler) update(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	id := chi.URLParam(r, "id")
+
+	var in UpdateServiceInput
+	if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	if err := h.validate.Struct(in); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+		return
+	}
+
+	s := Service{
+		ID:          id,
+		Name:        in.Name,
+		Description: in.Description,
+		BasePrice:   in.BasePrice,
+		IsActive:    in.IsActive,
+		UpdatedAt:   time.Now(),
+	}
+
+	if err := h.repo.Update(r.Context(), &s); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h handler) remove(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	if err := h.repo.SoftDelete(r.Context(), id); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 }
