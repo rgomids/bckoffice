@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -17,7 +18,13 @@ type fakeRepository struct {
 }
 
 func (f *fakeRepository) FindAll(ctx context.Context) ([]Customer, error) {
-	return f.customers, nil
+	out := make([]Customer, 0, len(f.customers))
+	for _, c := range f.customers {
+		if c.DeletedAt == nil {
+			out = append(out, c)
+		}
+	}
+	return out, nil
 }
 
 func (f *fakeRepository) FindByID(ctx context.Context, id string) (Customer, error) {
@@ -46,7 +53,18 @@ func (f *fakeRepository) Update(ctx context.Context, c *Customer, addresses []Ad
 }
 
 func (f *fakeRepository) SoftDelete(ctx context.Context, id string) error {
-	return nil
+	for i, c := range f.customers {
+		if c.ID == id {
+			if c.DeletedAt != nil {
+				return sql.ErrNoRows
+			}
+			now := time.Now()
+			c.DeletedAt = &now
+			f.customers[i] = c
+			return nil
+		}
+	}
+	return sql.ErrNoRows
 }
 
 func setupRouter() *chi.Mux {
@@ -176,5 +194,59 @@ func TestUpdateCustomer(t *testing.T) {
 
 	if out[0].LegalName != "ACME Updated" {
 		t.Fatalf("legal_name not updated: %+v", out[0])
+	}
+}
+
+func TestDeleteCustomer(t *testing.T) {
+	server := httptest.NewServer(setupRouter())
+	defer server.Close()
+
+	body := strings.NewReader(`{"legal_name":"ACME","document_id":"1","addresses":[{"address_type":"billing","street":"A","city":"X","state":"Y"}]}`)
+	resp, err := http.Post(server.URL+"/customers", "application/json", body)
+	if err != nil {
+		t.Fatalf("POST /customers error: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusCreated {
+		t.Fatalf("expected status 201, got %d", resp.StatusCode)
+	}
+
+	var created Customer
+	if err := json.NewDecoder(resp.Body).Decode(&created); err != nil {
+		t.Fatalf("decode created: %v", err)
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, server.URL+"/customers/"+created.ID, nil)
+	if err != nil {
+		t.Fatalf("new request: %v", err)
+	}
+	resp2, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatalf("DELETE /customers/{id} error: %v", err)
+	}
+	defer resp2.Body.Close()
+
+	if resp2.StatusCode != http.StatusNoContent {
+		t.Fatalf("expected status 204, got %d", resp2.StatusCode)
+	}
+
+	resp3, err := http.Get(server.URL + "/customers")
+	if err != nil {
+		t.Fatalf("GET /customers error: %v", err)
+	}
+	defer resp3.Body.Close()
+
+	if resp3.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", resp3.StatusCode)
+	}
+
+	var out []Customer
+	if err := json.NewDecoder(resp3.Body).Decode(&out); err != nil {
+		t.Fatalf("decode response: %v", err)
+	}
+
+	if len(out) != 0 {
+		t.Fatalf("expected 0 customers, got %d", len(out))
 	}
 }
