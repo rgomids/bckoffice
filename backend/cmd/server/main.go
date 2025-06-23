@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
 
+	"github.com/smithl4b/rcm.backoffice/internal/contract"
 	"github.com/smithl4b/rcm.backoffice/internal/customer"
 	"github.com/smithl4b/rcm.backoffice/internal/promoter"
 	"github.com/smithl4b/rcm.backoffice/internal/service"
@@ -27,6 +28,7 @@ func main() {
 	customerRepo := customer.NewPostgresRepository(db)
 	serviceRepo := service.NewPostgresRepository(db)
 	promoterRepo := promoter.NewPostgresRepository(db)
+	contractRepo := contract.NewPostgresRepository(db)
 
 	r := chi.NewRouter()
 
@@ -36,6 +38,8 @@ func main() {
 	service.RegisterRoutes(r, serviceRepo)
 	// módulo Promoters
 	promoter.RegisterRoutes(r, promoterRepo)
+	// módulo Contracts
+	contract.RegisterRoutes(r, contractRepo)
 
 	// rota simples de health-check
 	r.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
