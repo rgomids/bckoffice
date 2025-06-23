@@ -29,6 +29,11 @@ type handler struct {
 	repo Repository
 }
 
+// @Summary      Lista contas a receber
+// @Tags         finance
+// @Security     BearerAuth
+// @Success      200  {array}  AccountReceivable
+// @Router       /receivables [get]
 func (h handler) listReceivables(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	status := r.URL.Query().Get("status")
@@ -40,6 +45,11 @@ func (h handler) listReceivables(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(list)
 }
 
+// @Summary      Marca receivable como pago
+// @Tags         finance
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /receivables/{id}/pay [put]
 func (h handler) markAsPaid(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	err := h.repo.MarkAsPaid(r.Context(), id)
@@ -58,6 +68,11 @@ func (h handler) markAsPaid(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// @Summary      Lista comissoes
+// @Tags         finance
+// @Security     BearerAuth
+// @Success      200  {array}  Commission
+// @Router       /commissions [get]
 func (h handler) listCommissions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	pending := r.URL.Query().Get("pending") == "true"
@@ -69,6 +84,11 @@ func (h handler) listCommissions(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(list)
 }
 
+// @Summary      Aprova comissao
+// @Tags         finance
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /commissions/{id}/approve [put]
 func (h handler) approveCommission(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	userID := auth.UserIDFromContext(r.Context())

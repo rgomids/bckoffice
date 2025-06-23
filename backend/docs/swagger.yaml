@@ -1,0 +1,404 @@
+basePath: /
+definitions:
+  auth.AuthResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  contract.Contract:
+    properties:
+      created_at:
+        type: string
+      customer_id:
+        type: string
+      deleted_at:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      promoter_id:
+        type: string
+      service_id:
+        type: string
+      start_date:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      value_total:
+        type: number
+    type: object
+  customer.Customer:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      documentID:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      legalName:
+        type: string
+      phone:
+        type: string
+      promoterID:
+        type: string
+      tradeName:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  finance.AccountReceivable:
+    properties:
+      amount:
+        type: number
+      contractID:
+        type: string
+      createdAt:
+        type: string
+      dueDate:
+        type: string
+      id:
+        type: string
+      paidAt:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  finance.Commission:
+    properties:
+      amount:
+        type: number
+      approved:
+        type: boolean
+      approvedAt:
+        type: string
+      approvedBy:
+        type: string
+      contractID:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      promoterID:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  promoter.Promoter:
+    properties:
+      bankAccount:
+        type: object
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      documentID:
+        type: string
+      email:
+        type: string
+      fullName:
+        type: string
+      id:
+        type: string
+      phone:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  service.Service:
+    properties:
+      basePrice:
+        type: number
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      isActive:
+        type: boolean
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Endpoints do backoffice RCM Tech.
+  title: RCM Backoffice API
+  version: "0.1"
+paths:
+  /commissions:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/finance.Commission'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Lista comissoes
+      tags:
+      - finance
+  /commissions/{id}/approve:
+    put:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Aprova comissao
+      tags:
+      - finance
+  /contracts:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/contract.Contract'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Lista contratos
+      tags:
+      - contracts
+    post:
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/contract.Contract'
+      security:
+      - BearerAuth: []
+      summary: Cria contrato
+      tags:
+      - contracts
+  /contracts/{id}:
+    delete:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Remove contrato
+      tags:
+      - contracts
+    put:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Atualiza contrato
+      tags:
+      - contracts
+  /customers:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/customer.Customer'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Lista clientes
+      tags:
+      - customers
+    post:
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/customer.Customer'
+      security:
+      - BearerAuth: []
+      summary: Cria cliente
+      tags:
+      - customers
+  /customers/{id}:
+    delete:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Remove cliente
+      tags:
+      - customers
+    put:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Atualiza cliente
+      tags:
+      - customers
+  /login:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.AuthResponse'
+      summary: Autentica usuario
+      tags:
+      - auth
+  /promoters:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/promoter.Promoter'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Lista promotores
+      tags:
+      - promoters
+    post:
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/promoter.Promoter'
+      security:
+      - BearerAuth: []
+      summary: Cria promotor
+      tags:
+      - promoters
+  /promoters/{id}:
+    delete:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Remove promotor
+      tags:
+      - promoters
+    put:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Atualiza promotor
+      tags:
+      - promoters
+  /receivables:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/finance.AccountReceivable'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Lista contas a receber
+      tags:
+      - finance
+  /receivables/{id}/pay:
+    put:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Marca receivable como pago
+      tags:
+      - finance
+  /services:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/service.Service'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Lista servicos
+      tags:
+      - services
+    post:
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/service.Service'
+      security:
+      - BearerAuth: []
+      summary: Cria servico
+      tags:
+      - services
+  /services/{id}:
+    delete:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Remove servico
+      tags:
+      - services
+    put:
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: "null"
+      security:
+      - BearerAuth: []
+      summary: Atualiza servico
+      tags:
+      - services
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

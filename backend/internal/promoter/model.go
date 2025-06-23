@@ -12,7 +12,7 @@ type Promoter struct {
 	Email       string          `db:"email" json:"email,omitempty"`
 	Phone       string          `db:"phone" json:"phone,omitempty"`
 	DocumentID  string          `db:"document_id" json:"documentID,omitempty"`
-	BankAccount json.RawMessage `db:"bank_account" json:"bankAccount,omitempty"`
+	BankAccount json.RawMessage `db:"bank_account" json:"bankAccount,omitempty" swaggertype:"object"`
 	CreatedAt   time.Time       `db:"created_at" json:"createdAt"`
 	UpdatedAt   time.Time       `db:"updated_at" json:"updatedAt"`
 	DeletedAt   *time.Time      `db:"deleted_at" json:"deletedAt,omitempty"`

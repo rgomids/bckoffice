@@ -44,6 +44,11 @@ type UpdateContractInput struct {
 	Status     string  `json:"status" validate:"required,oneof=active suspended closed cancelled"`
 }
 
+// @Summary      Lista contratos
+// @Tags         contracts
+// @Security     BearerAuth
+// @Success      200  {array}  Contract
+// @Router       /contracts [get]
 func (h handler) list(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	contracts, err := h.repo.FindAll(r.Context())
@@ -67,6 +72,11 @@ func (h handler) list(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(contracts)
 }
 
+// @Summary      Cria contrato
+// @Tags         contracts
+// @Security     BearerAuth
+// @Success      201  {object}  Contract
+// @Router       /contracts [post]
 func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -134,6 +144,11 @@ func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(c)
 }
 
+// @Summary      Atualiza contrato
+// @Tags         contracts
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /contracts/{id} [put]
 func (h handler) update(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -191,6 +206,11 @@ func (h handler) update(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// @Summary      Remove contrato
+// @Tags         contracts
+// @Security     BearerAuth
+// @Success      204  {null}  nil
+// @Router       /contracts/{id} [delete]
 func (h handler) remove(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if err := h.repo.SoftDelete(r.Context(), id); err != nil {

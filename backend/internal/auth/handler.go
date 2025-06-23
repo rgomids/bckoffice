@@ -18,6 +18,10 @@ type handler struct {
 	repo Repository
 }
 
+// @Summary      Autentica usuario
+// @Tags         auth
+// @Success      200  {object}  AuthResponse
+// @Router       /login [post]
 func (h handler) login(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
