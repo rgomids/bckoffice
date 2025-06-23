@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
 
+	"github.com/smithl4b/rcm.backoffice/internal/audit"
 	"github.com/smithl4b/rcm.backoffice/internal/auth"
 	"github.com/smithl4b/rcm.backoffice/internal/contract"
 	"github.com/smithl4b/rcm.backoffice/internal/customer"
@@ -31,8 +32,12 @@ func main() {
 	promoterRepo := promoter.NewPostgresRepository(db)
 	contractRepo := contract.NewPostgresRepository(db)
 	authRepo := auth.NewPostgresRepository(db)
+	auditRepo := audit.NewPostgresRepository(db)
+	geoSvc := audit.NewHttpGeoService()
 
 	r := chi.NewRouter()
+	auditMw := audit.NewAuditMiddleware(auditRepo, geoSvc)
+	r.Use(auditMw)
 
 	// rota publica de login
 	auth.RegisterRoutes(r, authRepo)
