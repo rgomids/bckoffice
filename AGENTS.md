@@ -24,4 +24,6 @@
 4. **Falha rápida** – exit code ≠ 0 e stack-trace legível.
 5. **Documentação** – atualizar esta tabela ao adicionar ou alterar agente, atualizar README.md e AGENTS.md sempre que necessário
 6. **Revisão de código** – ao propor modificações em arquivos, analisar o trecho alterado para identificar possíveis melhorias ou riscos antes de aplicar a mudança.
+7. **Testes de unidade** – sempre criar e rodar testes unitários para qualquer alteração de código.
+8. **Formatação** – utilizar ferramentas de formatação (ex.: `gofmt`, `prettier`) para garantir a qualidade e consistência do código.
 
