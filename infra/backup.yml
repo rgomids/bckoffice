@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  backup:
+    image: minio/mc
+    container_name: rcm-backup
+    entrypoint: ["/bin/sh","-c","/scripts/pg_dump.sh && crond -f"]
+    volumes:
+      - ./backup/pg_dump.sh:/scripts/pg_dump.sh:ro
+      - ./backup:/backup
+    environment:
+      - PGUSER=${POSTGRES_USER}
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+      - PGHOST=db
+      - PGDATABASE=${POSTGRES_DB}
+      - MINIO_BUCKET=${MINIO_BUCKET}
+      - MC_HOST_minio=http://minioadmin:minioadmin@minio:9000
+    depends_on:
+      - db
+    restart: unless-stopped
