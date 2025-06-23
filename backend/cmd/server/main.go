@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
 
+	"github.com/smithl4b/rcm.backoffice/internal/auth"
 	"github.com/smithl4b/rcm.backoffice/internal/contract"
 	"github.com/smithl4b/rcm.backoffice/internal/customer"
 	"github.com/smithl4b/rcm.backoffice/internal/promoter"
@@ -29,17 +30,26 @@ func main() {
 	serviceRepo := service.NewPostgresRepository(db)
 	promoterRepo := promoter.NewPostgresRepository(db)
 	contractRepo := contract.NewPostgresRepository(db)
+	authRepo := auth.NewPostgresRepository(db)
 
 	r := chi.NewRouter()
 
-	// módulo Customers
-	customer.RegisterRoutes(r, customerRepo)
-	// módulo Services
-	service.RegisterRoutes(r, serviceRepo)
-	// módulo Promoters
-	promoter.RegisterRoutes(r, promoterRepo)
-	// módulo Contracts
-	contract.RegisterRoutes(r, contractRepo)
+	// rota publica de login
+	auth.RegisterRoutes(r, authRepo)
+
+	// rotas protegidas
+	r.Group(func(pr chi.Router) {
+		pr.Use(auth.AuthMiddleware)
+
+		pr.Group(func(r chi.Router) {
+			r.Use(auth.RequireRole("admin", "finance"))
+			customer.RegisterRoutes(r, customerRepo)
+		})
+
+		service.RegisterRoutes(pr, serviceRepo)
+		promoter.RegisterRoutes(pr, promoterRepo)
+		contract.RegisterRoutes(pr, contractRepo)
+	})
 
 	// rota simples de health-check
 	r.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
