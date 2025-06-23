@@ -63,6 +63,13 @@ docs/      # documentação complementar
 
 ---
 
+## Contribuindo
+
+1. Rode `gofmt -w .` dentro do diretório `backend/` antes de commitar qualquer mudança em Go.
+2. Execute `npm run lint` no `frontend/` para garantir a qualidade do código JavaScript e TypeScript.
+
+---
+
 ## Licença
 
 MIT
