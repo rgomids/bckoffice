@@ -1,14 +1,20 @@
-import { getToken } from "@/hooks/useAuth";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
-export async function api<T>(
-  input: RequestInfo,
-  init: RequestInit = {},
+export async function apiFetch<T = unknown>(
+  path: string,
+  options: RequestInit = {},
 ): Promise<T> {
-  const token = getToken();
-  const headers = new Headers(init.headers);
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
-  const response = await fetch(input, { ...init, headers });
-  return response.json() as Promise<T>;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  } as Record<string, string>;
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (!res.ok) throw new Error(await res.text());
+  return (await res.json()) as T;
 }
+
+export { apiFetch as api };

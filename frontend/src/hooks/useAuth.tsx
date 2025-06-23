@@ -8,16 +8,17 @@ import {
   ReactNode,
 } from "react";
 
+import { apiFetch } from "@/util/api";
+
+interface LoginResponse {
+  token: string;
+}
+
 export const login = async (email: string, password: string) => {
-  const res = await fetch("/login", {
+  const data = await apiFetch<LoginResponse>("/login", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
-  if (!res.ok) {
-    throw new Error("invalid credentials");
-  }
-  const data = await res.json();
   localStorage.setItem("token", data.token);
 };
 
