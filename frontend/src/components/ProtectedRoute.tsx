@@ -31,7 +31,7 @@ export default function ProtectedRoute({ children, roles }: PropsWithChildren<Pr
     }
     if (roles && roles.length > 0) {
       const payload = parseJwt(token);
-      if (!payload || !roles.includes(payload.role)) {
+      if (!payload || !payload.role || !roles.includes(payload.role)) {
         router.push("/login");
       }
     }
