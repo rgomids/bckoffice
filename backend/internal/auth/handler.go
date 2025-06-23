@@ -20,6 +20,9 @@ type handler struct {
 
 // @Summary      Autentica usuario
 // @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        credentials  body      CredentialsInput  true  "Credenciais de login"
 // @Success      200  {object}  AuthResponse
 // @Router       /login [post]
 func (h handler) login(w http.ResponseWriter, r *http.Request) {
