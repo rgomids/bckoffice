@@ -8,11 +8,21 @@ import (
 )
 
 // RegisterRoutes adiciona as rotas do módulo Customer.
-func RegisterRoutes(r chi.Router) {
-	r.Get("/customers", list)
+func RegisterRoutes(r chi.Router, repo Repository) {
+	h := handler{repo: repo}
+	r.Get("/customers", h.list)
 }
 
-func list(w http.ResponseWriter, _ *http.Request) {
+type handler struct {
+	repo Repository
+}
+
+func (h handler) list(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode([]interface{}{}) // placeholder []
+	customers, err := h.repo.FindAll(r.Context())
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	_ = json.NewEncoder(w).Encode(customers)
 }
