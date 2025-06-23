@@ -13,7 +13,7 @@
 | **DBMigrator** | `migrations/` – `make migrate-*` | Criar e aplicar migrações SQL no PostgreSQL (create, up, down, force). |
 | **Deployer** | `infra/docker-compose.yml` | Fazer `docker-compose pull && up -d` em staging/produção. |
 | **ObservabilityWatcher** | `infra/observability.yml` | Subir stack Prometheus/Grafana e validar dashboards. |
-| **BackupAgent** | `infra/cron/pg_dump.sh` | Executar backup diário do banco e enviar para bucket S3-compatível. |
+| **BackupAgent** | `infra/backup/pg_dump.sh` | Executar backup diário do banco e enviar para bucket S3-compatível. |
 | **CI** | `.github/workflows/ci.yml` | Rodar `go vet ./...` e `go test ./...` e build do frontend em cada push. |
 
 ### Boas práticas para novos agentes
