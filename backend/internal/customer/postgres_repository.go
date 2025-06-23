@@ -1,11 +1,13 @@
 package customer
 
 import (
-	"context"
-	"database/sql"
-	"errors"
+        "context"
+        "database/sql"
+        "errors"
+        "fmt"
 
-	"github.com/jmoiron/sqlx"
+        "github.com/jmoiron/sqlx"
+        "github.com/lib/pq"
 )
 
 // PostgresRepository implementa Repository usando PostgreSQL.
@@ -42,11 +44,33 @@ func (r *PostgresRepository) FindByID(ctx context.Context, id string) (Customer,
 }
 
 // Create insere um novo cliente.
-func (r *PostgresRepository) Create(ctx context.Context, c *Customer) error {
-	const q = `INSERT INTO customers (id, legal_name, trade_name, document_id, email, phone, promoter_id)
-               VALUES (:id, :legal_name, :trade_name, :document_id, :email, :phone, :promoter_id)`
-	_, err := r.db.NamedExecContext(ctx, q, c)
-	return err
+func (r *PostgresRepository) Create(ctx context.Context, c *Customer, addresses []Address) error {
+        tx, err := r.db.BeginTxx(ctx, nil)
+        if err != nil {
+                return err
+        }
+
+        const qc = `INSERT INTO customers (id, legal_name, trade_name, document_id, email, phone, promoter_id)
+                VALUES (:id, :legal_name, :trade_name, :document_id, :email, :phone, :promoter_id)`
+        if _, err = tx.NamedExecContext(ctx, qc, c); err != nil {
+                if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+                        _ = tx.Rollback()
+                        return ErrDuplicateDocumentID
+                }
+                _ = tx.Rollback()
+                return err
+        }
+
+        const qa = `INSERT INTO addresses (id, customer_id, address_type, street, number, complement, district, city, state, postal_code, country)
+                VALUES (:id, :customer_id, :address_type, :street, :number, :complement, :district, :city, :state, :postal_code, :country)`
+        for _, a := range addresses {
+                if _, err = tx.NamedExecContext(ctx, qa, a); err != nil {
+                        _ = tx.Rollback()
+                        return fmt.Errorf("insert address: %w", err)
+                }
+        }
+
+        return tx.Commit()
 }
 
 // Update atualiza dados do cliente.

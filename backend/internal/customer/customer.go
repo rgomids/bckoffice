@@ -1,8 +1,9 @@
 package customer
 
 import (
-	"context"
-	"time"
+        "context"
+        "errors"
+        "time"
 )
 
 // Customer representa um cliente da aplicacao.
@@ -20,10 +21,14 @@ type Customer struct {
 }
 
 // Repository define operacoes de acesso ao armazenamento de clientes.
+// ErrDuplicateDocumentID eh retornado quando ja existe um cliente com o mesmo
+// document_id no banco de dados.
+var ErrDuplicateDocumentID = errors.New("duplicate document_id")
+
 type Repository interface {
-	FindAll(ctx context.Context) ([]Customer, error)
-	FindByID(ctx context.Context, id string) (Customer, error)
-	Create(ctx context.Context, c *Customer) error
-	Update(ctx context.Context, c *Customer) error
-	SoftDelete(ctx context.Context, id string) error
+        FindAll(ctx context.Context) ([]Customer, error)
+        FindByID(ctx context.Context, id string) (Customer, error)
+        Create(ctx context.Context, c *Customer, addresses []Address) error
+        Update(ctx context.Context, c *Customer) error
+        SoftDelete(ctx context.Context, id string) error
 }
