@@ -63,3 +63,15 @@ func RequireRole(roles ...string) func(http.Handler) http.Handler {
 		})
 	}
 }
+
+// UserIDFromContext retorna o userID presente no contexto.
+func UserIDFromContext(ctx context.Context) string {
+	v, _ := ctx.Value(ctxUserID).(string)
+	return v
+}
+
+// RoleFromContext retorna a role presente no contexto.
+func RoleFromContext(ctx context.Context) string {
+	v, _ := ctx.Value(ctxRole).(string)
+	return v
+}
