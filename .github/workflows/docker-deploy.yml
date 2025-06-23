@@ -1,0 +1,37 @@
+name: Deploy to Production
+on:
+  workflow_run:
+    workflows: ["Build & Push Images"]
+    branches: [ main ]
+    types: [completed]
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.10.1
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Copy compose files
+        run: |
+          rsync -avz --delete \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            infra/ \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/opt/rcm-backoffice/infra/
+
+      - name: Deploy containers
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+            "cd /opt/rcm-backoffice/infra && \
+             docker-compose pull && \
+             docker-compose up -d --remove-orphans && \
+             docker image prune -f"
+
