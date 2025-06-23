@@ -1,13 +1,13 @@
 package customer
 
 import (
-        "context"
-        "database/sql"
-        "errors"
-        "fmt"
+	"context"
+	"database/sql"
+	"errors"
+	"fmt"
 
-        "github.com/jmoiron/sqlx"
-        "github.com/lib/pq"
+	"github.com/jmoiron/sqlx"
+	"github.com/lib/pq"
 )
 
 // PostgresRepository implementa Repository usando PostgreSQL.
@@ -45,41 +45,81 @@ func (r *PostgresRepository) FindByID(ctx context.Context, id string) (Customer,
 
 // Create insere um novo cliente.
 func (r *PostgresRepository) Create(ctx context.Context, c *Customer, addresses []Address) error {
-        tx, err := r.db.BeginTxx(ctx, nil)
-        if err != nil {
-                return err
-        }
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return err
+	}
 
-        const qc = `INSERT INTO customers (id, legal_name, trade_name, document_id, email, phone, promoter_id)
+	const qc = `INSERT INTO customers (id, legal_name, trade_name, document_id, email, phone, promoter_id)
                 VALUES (:id, :legal_name, :trade_name, :document_id, :email, :phone, :promoter_id)`
-        if _, err = tx.NamedExecContext(ctx, qc, c); err != nil {
-                if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
-                        _ = tx.Rollback()
-                        return ErrDuplicateDocumentID
-                }
-                _ = tx.Rollback()
-                return err
-        }
+	if _, err = tx.NamedExecContext(ctx, qc, c); err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+			_ = tx.Rollback()
+			return ErrDuplicateDocumentID
+		}
+		_ = tx.Rollback()
+		return err
+	}
 
-        const qa = `INSERT INTO addresses (id, customer_id, address_type, street, number, complement, district, city, state, postal_code, country)
+	const qa = `INSERT INTO addresses (id, customer_id, address_type, street, number, complement, district, city, state, postal_code, country)
                 VALUES (:id, :customer_id, :address_type, :street, :number, :complement, :district, :city, :state, :postal_code, :country)`
-        for _, a := range addresses {
-                if _, err = tx.NamedExecContext(ctx, qa, a); err != nil {
-                        _ = tx.Rollback()
-                        return fmt.Errorf("insert address: %w", err)
-                }
-        }
+	for _, a := range addresses {
+		if _, err = tx.NamedExecContext(ctx, qa, a); err != nil {
+			_ = tx.Rollback()
+			return fmt.Errorf("insert address: %w", err)
+		}
+	}
 
-        return tx.Commit()
+	return tx.Commit()
 }
 
 // Update atualiza dados do cliente.
-func (r *PostgresRepository) Update(ctx context.Context, c *Customer) error {
-	const q = `UPDATE customers SET legal_name=:legal_name, trade_name=:trade_name, document_id=:document_id,
+func (r *PostgresRepository) Update(ctx context.Context, c *Customer, addrs []Address) error {
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	const qc = `UPDATE customers SET legal_name=:legal_name, trade_name=:trade_name, document_id=:document_id,
                 email=:email, phone=:phone, promoter_id=:promoter_id, updated_at=now()
-                WHERE id=:id`
-	_, err := r.db.NamedExecContext(ctx, q, c)
-	return err
+                WHERE id=:id AND deleted_at IS NULL`
+	res, err := tx.NamedExecContext(ctx, qc, c)
+	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+			_ = tx.Rollback()
+			return ErrDuplicateDocumentID
+		}
+		_ = tx.Rollback()
+		return err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		_ = tx.Rollback()
+		return err
+	}
+	if affected == 0 {
+		_ = tx.Rollback()
+		return sql.ErrNoRows
+	}
+
+	if addrs != nil {
+		if _, err = tx.ExecContext(ctx, `DELETE FROM addresses WHERE customer_id=$1`, c.ID); err != nil {
+			_ = tx.Rollback()
+			return err
+		}
+
+		const qa = `INSERT INTO addresses (id, customer_id, address_type, street, number, complement, district, city, state, postal_code, country)
+                        VALUES (:id, :customer_id, :address_type, :street, :number, :complement, :district, :city, :state, :postal_code, :country)`
+		for _, a := range addrs {
+			if _, err = tx.NamedExecContext(ctx, qa, a); err != nil {
+				_ = tx.Rollback()
+				return fmt.Errorf("insert address: %w", err)
+			}
+		}
+	}
+
+	return tx.Commit()
 }
 
 // SoftDelete marca um cliente como removido.

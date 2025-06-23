@@ -1,9 +1,9 @@
 package customer
 
 import (
-        "context"
-        "errors"
-        "time"
+	"context"
+	"errors"
+	"time"
 )
 
 // Customer representa um cliente da aplicacao.
@@ -26,9 +26,9 @@ type Customer struct {
 var ErrDuplicateDocumentID = errors.New("duplicate document_id")
 
 type Repository interface {
-        FindAll(ctx context.Context) ([]Customer, error)
-        FindByID(ctx context.Context, id string) (Customer, error)
-        Create(ctx context.Context, c *Customer, addresses []Address) error
-        Update(ctx context.Context, c *Customer) error
-        SoftDelete(ctx context.Context, id string) error
+	FindAll(ctx context.Context) ([]Customer, error)
+	FindByID(ctx context.Context, id string) (Customer, error)
+	Create(ctx context.Context, c *Customer, addresses []Address) error
+	Update(ctx context.Context, c *Customer, addresses []Address) error
+	SoftDelete(ctx context.Context, id string) error
 }
