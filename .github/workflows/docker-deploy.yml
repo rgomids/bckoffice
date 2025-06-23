@@ -31,7 +31,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
             "cd /opt/rcm-backoffice/infra && \
-             docker-compose pull && \
-             docker-compose up -d --remove-orphans && \
+             docker-compose -f docker-compose.yml.prod pull && \
+             docker-compose -f docker-compose.yml.prod up -d --remove-orphans && \
              docker image prune -f"
 

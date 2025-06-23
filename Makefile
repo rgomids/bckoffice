@@ -7,12 +7,13 @@ ifneq (,$(wildcard .env))
   export
 endif
 
-.PHONY: help dev up down logs backend frontend test lint build
+.PHONY: help dev prod up down logs backend frontend test lint build
 
 help:
 		@echo "Targets principais:"
-		@echo "  dev        - docker-compose up (build) + logs follow"
-		@echo "  up         - docker-compose up -d (build)"
+               @echo "  dev        - docker-compose dev environment"
+               @echo "  prod       - docker-compose production"
+               @echo "  up         - docker-compose up -d (build)"
 		@echo "  down       - docker-compose down"
 		@echo "  logs       - docker-compose logs -f"
 	@echo "  backend    - go run ./backend/cmd/server"
@@ -26,13 +27,17 @@ help:
 	@echo "  migrate-up - aplica todas as migrations"
 	@echo "  migrate-down - desfaz migrations (mnum=1)"
 	@echo "  migrate-up-force - forca versao da migration (version=...)"
-dev: down up logs
+dev:
+                docker-compose -f infra/docker-compose.yml up -d --build
+                docker-compose -f infra/docker-compose.yml logs -f
+prod:
+                docker-compose -f infra/docker-compose.yml.prod up -d
 up:
-		docker-compose -f infra/docker-compose.yml up -d --build
+                docker-compose -f infra/docker-compose.yml up -d --build
 down:
-		docker-compose -f infra/docker-compose.yml down
+                docker-compose -f infra/docker-compose.yml down
 logs:
-		docker-compose -f infra/docker-compose.yml logs -f
+                docker-compose -f infra/docker-compose.yml logs -f
 backend:
 		go run ./backend/cmd/server
 frontend:
@@ -80,7 +85,7 @@ migrate-up-force:
 			-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
 			force $(version)
 build-be:
-		docker buildx build -t rcm.backoffice/backend:latest -f backend/Dockerfile backend
+                docker buildx build -t rcm.backoffice/backend:latest -f backend/Dockerfile.prod backend
 build-fe:
-		docker buildx build -t rcm.backoffice/frontend:latest -f frontend/Dockerfile frontend
+                docker buildx build -t rcm.backoffice/frontend:latest -f frontend/Dockerfile.prod frontend
 	
