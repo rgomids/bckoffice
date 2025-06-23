@@ -15,6 +15,7 @@
 | **ObservabilityWatcher** | `infra/observability.yml` | Subir stack Prometheus/Grafana e validar dashboards. |
 | **BackupAgent** | `infra/backup/pg_dump.sh` | Executar backup diário do banco e enviar para bucket S3-compatível. |
 | **CI** | `.github/workflows/ci.yml` | Rodar `go vet ./...` e `go test ./...` e build do frontend em cada push. |
+| **ImagePublisher** | `.github/workflows/docker-build.yml` | Build e push das imagens backend/frontend para o GHCR a cada merge na `main`. |
 
 ### Boas práticas para novos agentes
 
