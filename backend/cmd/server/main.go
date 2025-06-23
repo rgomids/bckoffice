@@ -3,17 +3,31 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+
+	_ "github.com/lib/pq"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/jmoiron/sqlx"
 
 	"github.com/smithl4b/rcm.backoffice/internal/customer"
 )
 
 func main() {
+
+	dsn := os.Getenv("DB_DSN")
+	db, err := sqlx.Open("postgres", dsn)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	repo := customer.NewPostgresRepository(db)
+
 	r := chi.NewRouter()
 
 	// módulo Customers
-	customer.RegisterRoutes(r)
+	customer.RegisterRoutes(r, repo)
 
 	// rota simples de health-check
 	r.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
