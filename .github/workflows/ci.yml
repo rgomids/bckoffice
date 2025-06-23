@@ -29,12 +29,12 @@ jobs:
       - name: Run go vet
         run: |
           cd backend
-          go vet ./cmd/server/main.go
+          go vet ./...
 
       - name: Run tests
         run: |
           cd backend
-          go test ./cmd/server/main.go
+          go test ./...
 
   frontend:
     name: Frontend • Next.js build
