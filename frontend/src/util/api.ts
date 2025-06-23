@@ -1,10 +1,10 @@
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
-export async function apiFetch(
+export async function apiFetch<T = unknown>(
   path: string,
   options: RequestInit = {},
-): Promise<any> {
+): Promise<T> {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const headers = {
@@ -14,7 +14,7 @@ export async function apiFetch(
   if (token) headers["Authorization"] = `Bearer ${token}`;
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
   if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  return (await res.json()) as T;
 }
 
 export { apiFetch as api };
