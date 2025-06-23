@@ -11,6 +11,7 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"github.com/smithl4b/rcm.backoffice/internal/customer"
+	"github.com/smithl4b/rcm.backoffice/internal/promoter"
 	"github.com/smithl4b/rcm.backoffice/internal/service"
 )
 
@@ -25,6 +26,7 @@ func main() {
 
 	customerRepo := customer.NewPostgresRepository(db)
 	serviceRepo := service.NewPostgresRepository(db)
+	promoterRepo := promoter.NewPostgresRepository(db)
 
 	r := chi.NewRouter()
 
@@ -32,6 +34,8 @@ func main() {
 	customer.RegisterRoutes(r, customerRepo)
 	// módulo Services
 	service.RegisterRoutes(r, serviceRepo)
+	// módulo Promoters
+	promoter.RegisterRoutes(r, promoterRepo)
 
 	// rota simples de health-check
 	r.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
