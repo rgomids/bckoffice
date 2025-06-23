@@ -78,6 +78,19 @@ docs/      # documentação complementar
 1. Rode `gofmt -w .` dentro do diretório `backend/` antes de commitar qualquer mudança em Go.
 2. Execute `npm run lint` no `frontend/` para garantir a qualidade do código JavaScript e TypeScript.
 
+## Imagens no GHCR
+
+Cada merge na branch `main` gera imagens `:latest` e `:<commit_sha>` publicadas em **ghcr.io**.
+
+Para atualizar em produção:
+
+```bash
+docker-compose pull backend frontend
+docker-compose up -d
+```
+
+Opcional: crie o secret `GHCR_PAT` se preferir token permanente.
+
 ---
 
 ## Licença
