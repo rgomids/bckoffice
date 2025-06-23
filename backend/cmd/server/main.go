@@ -14,6 +14,7 @@ import (
 	"github.com/smithl4b/rcm.backoffice/internal/auth"
 	"github.com/smithl4b/rcm.backoffice/internal/contract"
 	"github.com/smithl4b/rcm.backoffice/internal/customer"
+	"github.com/smithl4b/rcm.backoffice/internal/finance"
 	"github.com/smithl4b/rcm.backoffice/internal/promoter"
 	"github.com/smithl4b/rcm.backoffice/internal/service"
 )
@@ -31,6 +32,7 @@ func main() {
 	serviceRepo := service.NewPostgresRepository(db)
 	promoterRepo := promoter.NewPostgresRepository(db)
 	contractRepo := contract.NewPostgresRepository(db)
+	financeRepo := finance.NewPostgresRepository(db)
 	authRepo := auth.NewPostgresRepository(db)
 	auditRepo := audit.NewPostgresRepository(db)
 	geoSvc := audit.NewHttpGeoService()
@@ -54,6 +56,7 @@ func main() {
 		service.RegisterRoutes(pr, serviceRepo)
 		promoter.RegisterRoutes(pr, promoterRepo)
 		contract.RegisterRoutes(pr, contractRepo)
+		finance.RegisterRoutes(pr, financeRepo)
 	})
 
 	// rota simples de health-check
