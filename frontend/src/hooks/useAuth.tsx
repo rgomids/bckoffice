@@ -10,8 +10,12 @@ import {
 
 import { apiFetch } from "@/util/api";
 
+interface LoginResponse {
+  token: string;
+}
+
 export const login = async (email: string, password: string) => {
-  const data = await apiFetch("/login", {
+  const data = await apiFetch<LoginResponse>("/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
   });
