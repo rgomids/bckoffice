@@ -23,22 +23,27 @@ type GeoService interface {
 
 // HttpGeoService implementa GeoService via chamada HTTP pública.
 type HttpGeoService struct {
-	client *http.Client
+	client  *http.Client
+	baseURL string
 }
 
 // NewHttpGeoService cria um HttpGeoService com timeout configurado.
-func NewHttpGeoService() *HttpGeoService {
+// Se baseURL for vazio, usa https://ipapi.co como provedor padrao.
+func NewHttpGeoService(baseURL string) *HttpGeoService {
 	timeout := 5 * time.Second
 	if v := os.Getenv("GEO_TIMEOUT_MS"); v != "" {
 		if ms, err := time.ParseDuration(v + "ms"); err == nil {
 			timeout = ms
 		}
 	}
-	return &HttpGeoService{client: &http.Client{Timeout: timeout}}
+	if baseURL == "" {
+		baseURL = "https://ipapi.co"
+	}
+	return &HttpGeoService{client: &http.Client{Timeout: timeout}, baseURL: baseURL}
 }
 
 func (h *HttpGeoService) Lookup(ctx context.Context, ip string) (GeoInfo, error) {
-	url := "https://ipapi.co/" + ip + "/json/"
+	url := h.baseURL + "/" + ip + "/json/"
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return GeoInfo{}, err

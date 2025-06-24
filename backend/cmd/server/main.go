@@ -23,6 +23,7 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 
 	"github.com/rgomids/bckoffice/internal/audit"
+	"github.com/rgomids/bckoffice/internal/auditquery"
 	"github.com/rgomids/bckoffice/internal/auth"
 	"github.com/rgomids/bckoffice/internal/contract"
 	"github.com/rgomids/bckoffice/internal/customer"
@@ -49,7 +50,8 @@ func main() {
 	financeRepo := finance.NewPostgresRepository(db)
 	authRepo := auth.NewPostgresRepository(db)
 	auditRepo := audit.NewPostgresRepository(db)
-	geoSvc := audit.NewHttpGeoService()
+	auditQueryRepo := auditquery.NewPostgresRepository(db)
+	geoSvc := audit.NewHttpGeoService(os.Getenv("GEO_PROVIDER_URL"))
 
 	r := chi.NewRouter()
 	corsMw := cors.New(cors.Options{
@@ -60,8 +62,6 @@ func main() {
 		AllowCredentials: true,
 	})
 	r.Use(corsMw.Handler)
-	auditMw := audit.NewAuditMiddleware(auditRepo, geoSvc)
-	r.Use(auditMw)
 	r.Get("/docs/*", httpSwagger.WrapHandler)
 
 	// rota publica de login
@@ -70,6 +70,7 @@ func main() {
 	// rotas protegidas
 	r.Group(func(pr chi.Router) {
 		pr.Use(auth.AuthMiddleware)
+		pr.Use(audit.NewAuditMiddleware(auditRepo, geoSvc))
 
 		pr.Group(func(r chi.Router) {
 			r.Use(auth.RequireRole("admin", "finance"))
@@ -81,6 +82,7 @@ func main() {
 		lead.RegisterRoutes(pr, leadRepo)
 		contract.RegisterRoutes(pr, contractRepo)
 		finance.RegisterRoutes(pr, financeRepo)
+		auditquery.RegisterRoutes(pr, auditQueryRepo)
 	})
 
 	// rota simples de health-check
