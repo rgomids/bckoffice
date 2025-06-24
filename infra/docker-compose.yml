@@ -33,7 +33,7 @@ services:
   frontend:
     build:
       context: ../frontend
-      dockerfile: ockerfile.dev
+      dockerfile: Dockerfile.dev
     container_name: rgps-frontend
 
     depends_on:
