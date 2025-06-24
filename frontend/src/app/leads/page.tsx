@@ -15,7 +15,7 @@ interface Lead {
   createdAt: string;
 }
 
-const fetcher = (url: string) => api(url);
+const fetcher = (url: string) => api<Lead[]>(url);
 
 export default function LeadsPage() {
   const { data: leadsLead, mutate: mutLead } = useSWR<Lead[]>("/leads?status=lead", fetcher);
