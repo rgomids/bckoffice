@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import useSWR from "swr";
-import { DndContext, closestCenter } from "@dnd-kit/core";
+import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import LeadCard from "./LeadCard";
@@ -32,7 +32,7 @@ export default function LeadsPage() {
     mutContract();
   };
 
-  const onDragEnd = async (event: any) => {
+  const onDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
     const targetStatus = over.id as string;
