@@ -16,8 +16,8 @@ interface Service { id: string; name: string; }
 export default function NewLeadModal({ isOpen, onClose, onSuccess }: ModalProps) {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [services, setServices] = useState<Service[]>([]);
-  const [customerID, setCustomerID] = useState("{}");
-  const [serviceID, setServiceID] = useState("{}");
+  const [customerID, setCustomerID] = useState("");
+  const [serviceID, setServiceID] = useState("");
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
@@ -27,9 +27,20 @@ export default function NewLeadModal({ isOpen, onClose, onSuccess }: ModalProps)
     })();
   }, []);
 
+  interface LeadPayload {
+    customer_id: string;
+    service_id: string;
+    notes: string;
+    promoter_id?: string;
+  }
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const payload: any = { customer_id: customerID, service_id: serviceID, notes };
+    const payload: LeadPayload = {
+      customer_id: customerID,
+      service_id: serviceID,
+      notes,
+    };
     const token = getToken();
     if (token) {
       const payloadJwt = JSON.parse(atob(token.split(".")[1]));

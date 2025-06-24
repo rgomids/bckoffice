@@ -29,4 +29,5 @@
 7. **Testes de unidade** – sempre criar e rodar testes unitários para qualquer alteração de código.
 8. **Formatação** – utilizar ferramentas de formatação (ex.: `gofmt`, `prettier`) para garantir a qualidade e consistência do código.
 9. **Gofmt obrigatório** – antes de realizar commits, execute `gofmt -w .` dentro do diretório `backend/` para manter o código Go devidamente formatado.
+10. **Next.js build** – antes de realizar commits que alterem arquivos em `frontend/`, execute `next build` dentro desse diretório e só prossiga se o build completar sem erros, corrigindo quaisquer problemas encontrados.
 
