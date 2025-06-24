@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Money from "@/components/Money";
 import StatusBadge from "@/components/StatusBadge";
 import Toast from "@/components/Toast";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 
 interface Receivable {
   id: string;
@@ -63,7 +63,7 @@ export default function ReceivablesClient() {
             key={t.label}
             onClick={() => changeStatus(t.value)}
             className={`px-3 py-1 border rounded ${
-              statusParam === (t.value || "open") ? "bg-blue-500 text-white" : ""
+              statusParam === (t.value || "open") ? "bg-primary text-background" : ""
             }`}
           >
             {t.label}
@@ -72,12 +72,12 @@ export default function ReceivablesClient() {
       </div>
       {isLoading ? (
         <div className="flex justify-center p-4">
-          <div className="h-5 w-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+          <div className="h-5 w-5 border-2 border-card border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-card">
+            <thead className="bg-card">
               <tr>
                 <th className="px-4 py-2 text-left">Vencimento</th>
                 <th className="px-4 py-2 text-left">Cliente</th>
@@ -89,7 +89,7 @@ export default function ReceivablesClient() {
             </thead>
             <tbody>
               {data?.map((r, idx) => (
-                <tr key={r.id} className={idx % 2 ? "bg-gray-50" : "bg-white"}>
+                <tr key={r.id} className={idx % 2 ? "bg-card" : "bg-card"}>
                   <td className="px-4 py-2">{new Date(r.dueDate).toLocaleDateString()}</td>
                   <td className="px-4 py-2">{r.customer?.trade_name}</td>
                   <td className="px-4 py-2">{r.service?.name}</td>
@@ -97,7 +97,7 @@ export default function ReceivablesClient() {
                   <td className="px-4 py-2"><StatusBadge status={r.status} /></td>
                   <td className="px-4 py-2">
                     {r.status === "open" && (
-                      <button className="text-blue-600" onClick={() => markPaid(r.id)}>
+                      <button className="text-primary" onClick={() => markPaid(r.id)}>
                         Marcar como Pago
                       </button>
                     )}

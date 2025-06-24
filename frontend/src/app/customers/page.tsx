@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import CustomerForm from "./CustomerForm";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 
 interface Customer {
   id: string;
@@ -55,13 +55,13 @@ export default function CustomersPage() {
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-bold">Clientes</h1>
-          <button onClick={openForNew} className="bg-blue-500 text-white px-4 py-2">
+          <button onClick={openForNew} className="bg-primary text-background px-4 py-2">
             Novo Cliente
           </button>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50 sticky top-0">
+          <table className="min-w-full divide-y divide-card">
+            <thead className="bg-card sticky top-0">
               <tr>
                 <th className="px-4 py-2 text-left">Legal Name</th>
                 <th className="px-4 py-2 text-left">Trade Name</th>
@@ -73,15 +73,19 @@ export default function CustomersPage() {
             </thead>
             <tbody>
               {customers.map((c, idx) => (
-                <tr key={c.id} className={idx % 2 ? "bg-gray-50" : "bg-white"}>
+                <tr key={c.id} className={idx % 2 ? "bg-card" : "bg-card"}>
                   <td className="px-4 py-2">{c.legalName}</td>
                   <td className="px-4 py-2">{c.tradeName}</td>
                   <td className="px-4 py-2">{c.documentID}</td>
                   <td className="px-4 py-2">{c.email}</td>
                   <td className="px-4 py-2">{c.phone}</td>
                   <td className="px-4 py-2 space-x-2">
-                    <button onClick={() => openForEdit(c)}>✏️</button>
-                    <button onClick={() => handleDelete(c.id)}>🗑</button>
+                    <button aria-label="Editar" onClick={() => openForEdit(c)}>
+                      ✏️
+                    </button>
+                    <button aria-label="Remover" onClick={() => handleDelete(c.id)}>
+                      🗑
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -114,7 +118,7 @@ export default function CustomersPage() {
                 leave="ease-in duration-200"
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
-                className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl"
+                className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-card shadow-xl"
               >
                 <CustomerForm
                   onClose={closeModal}

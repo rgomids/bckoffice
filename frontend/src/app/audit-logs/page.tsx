@@ -2,7 +2,7 @@
 import useSWR from "swr";
 import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 
 interface AuditLog {
   id: string;
@@ -20,7 +20,7 @@ export default function AuditLogsPage() {
   return (
     <ProtectedRoute roles={["admin"]}>
       <div className="p-4 space-y-2">
-        <Link href="/dashboard" className="text-blue-600 hover:underline">
+        <Link href="/dashboard" className="text-primary hover:underline">
           Voltar
         </Link>
         <h1 className="text-xl font-bold">Audit Logs</h1>
