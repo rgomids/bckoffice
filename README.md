@@ -1,4 +1,4 @@
-# RCM Tech — Backoffice
+# Backoffice
 
 Monolito modular que reúne **Go (Chi)** no backend, **Next.js 14 (App Router)** no frontend
 e **PostgreSQL 16** como banco principal. Todo o ciclo de vida roda em **Docker Compose**,
