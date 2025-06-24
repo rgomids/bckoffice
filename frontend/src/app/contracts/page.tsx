@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Money from "@/components/Money";
 import Toast from "@/components/Toast";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 import ContractForm, { Contract } from "./ContractForm";
 import Attachments from "./Attachments";
 
@@ -60,18 +60,18 @@ export default function ContractsPage() {
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-bold">Contratos</h1>
-          <button onClick={openForNew} className="bg-blue-500 text-white px-4 py-2">
+          <button onClick={openForNew} className="bg-primary text-background px-4 py-2">
             Novo Contrato
           </button>
         </div>
         {isLoading ? (
           <div className="flex justify-center p-4">
-            <div className="h-5 w-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+            <div className="h-5 w-5 border-2 border-card border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-card">
+              <thead className="bg-card">
                 <tr>
                   <th className="px-4 py-2 text-left">Cliente</th>
                   <th className="px-4 py-2 text-left">Serviço</th>
@@ -84,7 +84,7 @@ export default function ContractsPage() {
               </thead>
               <tbody>
                 {data?.map((c, idx) => (
-                  <tr key={c.id} className={idx % 2 ? "bg-gray-50" : "bg-white"}>
+                  <tr key={c.id} className={idx % 2 ? "bg-card" : "bg-card"}>
                     <td className="px-4 py-2">{c.customer?.trade_name}</td>
                     <td className="px-4 py-2">{c.service?.name}</td>
                     <td className="px-4 py-2">
@@ -98,9 +98,15 @@ export default function ContractsPage() {
                     </td>
                     <td className="px-4 py-2">{c.status}</td>
                     <td className="px-4 py-2 space-x-2">
-                      <button onClick={() => openForEdit(c)}>✏️</button>
-                      <button onClick={() => setAttId(c.id)}>📎</button>
-                      <button onClick={() => handleDelete(c.id)}>🗑</button>
+                      <button aria-label="Editar" onClick={() => openForEdit(c)}>
+                        ✏️
+                      </button>
+                      <button aria-label="Anexos" onClick={() => setAttId(c.id)}>
+                        📎
+                      </button>
+                      <button aria-label="Remover" onClick={() => handleDelete(c.id)}>
+                        🗑
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -118,7 +124,7 @@ export default function ContractsPage() {
                 &#8203;
               </span>
               <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
-                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl">
+                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-card shadow-xl">
                   <ContractForm contract={editing || undefined} onClose={closeForm} onSuccess={handleSuccess} />
                 </div>
               </Transition.Child>
@@ -135,7 +141,7 @@ export default function ContractsPage() {
                 &#8203;
               </span>
               <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
-                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl">
+                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-card shadow-xl">
                   {attId && <Attachments contractId={attId} />}
                 </div>
               </Transition.Child>

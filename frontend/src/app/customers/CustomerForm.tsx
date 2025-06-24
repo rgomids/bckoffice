@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 
 interface CustomerFormProps {
   onClose: () => void;
@@ -150,7 +150,7 @@ export default function CustomerForm({ onClose, onSuccess, customer }: CustomerF
         <button type="button" onClick={onClose} className="border px-4 py-2">
           Cancelar
         </button>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2">
+        <button type="submit" className="bg-primary text-background px-4 py-2">
           Salvar
         </button>
       </div>

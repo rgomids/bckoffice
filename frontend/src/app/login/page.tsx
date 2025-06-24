@@ -39,7 +39,7 @@ export default function LoginPage() {
           className="border p-2"
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        <button type="submit" className="bg-blue-500 text-white p-2">
+        <button type="submit" className="bg-primary text-background p-2">
           Entrar
         </button>
       </form>

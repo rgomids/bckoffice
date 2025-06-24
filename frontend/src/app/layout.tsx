@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "../index.css";
 import { AuthProvider } from "@/hooks/useAuth";
 
 export const metadata: Metadata = {

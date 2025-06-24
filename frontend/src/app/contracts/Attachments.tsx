@@ -2,7 +2,7 @@
 import { useRef, useState } from "react";
 import useSWR from "swr";
 import Toast from "@/components/Toast";
-import { api, apiPresign } from "@/util/api";
+import { api, apiPresign } from "@/lib/api";
 
 interface Attachment {
   id: string;
@@ -64,15 +64,17 @@ export default function Attachments({ contractId }: { contractId: string }) {
   return (
     <div className="space-y-2">
       {isLoading ? (
-        <div className="h-5 w-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+        <div className="h-5 w-5 border-2 border-card border-t-transparent rounded-full animate-spin" />
       ) : (
         <ul className="space-y-1">
           {data?.map((a) => (
             <li key={a.id} className="flex justify-between items-center">
-              <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+              <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">
                 {a.filename}
               </a>
-              <button onClick={() => remove(a.id)}>🗑</button>
+              <button aria-label="Remover" onClick={() => remove(a.id)}>
+                🗑
+              </button>
             </li>
           ))}
         </ul>
@@ -90,7 +92,7 @@ export default function Attachments({ contractId }: { contractId: string }) {
         disabled={uploading}
       >
         {uploading ? (
-          <div className="h-4 w-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+          <div className="h-4 w-4 border-2 border-card border-t-transparent rounded-full animate-spin" />
         ) : (
           "Adicionar Arquivo"
         )}
