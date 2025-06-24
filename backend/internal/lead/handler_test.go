@@ -14,7 +14,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/smithl4b/rcm.backoffice/internal/auth"
+	"github.com/rgomids/bckoffice/internal/auth"
 )
 
 type fakeRepository struct {

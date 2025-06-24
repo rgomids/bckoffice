@@ -11,7 +11,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/oklog/ulid/v2"
 
-	"github.com/smithl4b/rcm.backoffice/internal/auth"
+	"github.com/rgomids/bckoffice/internal/auth"
 )
 
 // RegisterRoutes adiciona as rotas do modulo Lead.

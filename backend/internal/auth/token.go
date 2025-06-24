@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/smithl4b/rcm.backoffice/internal/users"
+	"github.com/rgomids/bckoffice/internal/users"
 )
 
 // generateToken cria um JWT para o usuario informado.
