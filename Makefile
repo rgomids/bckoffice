@@ -7,10 +7,11 @@ ifneq (,$(wildcard .env))
   export
 endif
 
-.PHONY: help dev up down logs backend frontend test lint build
+.PHONY: help dev prod up down logs backend frontend test lint build
 
 help:
 	@echo "Targets principais:"
+	@echo "  prod       - docker-compose production"
 	@echo "  dev        - docker-compose up (build) + logs follow"
 	@echo "  up         - docker-compose up -d (build)"
 	@echo "  down       - docker-compose down"
@@ -26,7 +27,11 @@ help:
 	@echo "  migrate-up - aplica todas as migrations"
 	@echo "  migrate-down - desfaz migrations (mnum=1)"
 	@echo "  migrate-up-force - forca versao da migration (version=...)"
+
 dev: down up logs
+
+prod:
+	docker-compose -f infra/docker-compose.yml.prod up -d
 up:
 	docker-compose -f infra/docker-compose.yml up -d --build
 down:
@@ -80,6 +85,6 @@ migrate-up-force:
 		-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
 		force $(version)
 build-be:
-	docker buildx build -t rgps.backoffice/backend:latest -f backend/Dockerfile backend
+	docker buildx build -t rgps.backoffice/backend:latest -f backend/Dockerfile.prod backend
 build-fe:
-	docker buildx build -t rgps.backoffice/frontend:latest -f frontend/Dockerfile frontend
+	docker buildx build -t rgps.backoffice/frontend:latest -f frontend/Dockerfile.prod frontend

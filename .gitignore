@@ -3,6 +3,7 @@
 /pkg/
 /dist/
 /coverage.out
+backend/tmp/main
 
 # --- Node / Next.js ---
 node_modules/
@@ -17,7 +18,12 @@ pnpm-debug.log*
 # --- Docker ---
 *.log
 **/Dockerfile*
+!backend/Dockerfile.prod
+!backend/Dockerfile.dev
+!frontend/Dockerfile.prod
+!frontend/Dockerfile.dev
 docker-compose*.yml
+!infra/docker-compose*.yml
 
 # --- IDEs & Editors ---
 .vscode/

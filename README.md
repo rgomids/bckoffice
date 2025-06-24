@@ -17,7 +17,7 @@ tanto em desenvolvimento quanto em produção.
 
 ```bash
 cp .env.example .env
-docker-compose -f infra/docker-compose.yml up -d --build
+docker-compose up -d
 ````
 
 * **Frontend**: [http://localhost:3000](http://localhost:3000)
@@ -88,8 +88,8 @@ Cada merge na branch `main` gera imagens `:latest` e `:<commit_sha>` publicadas 
 Para atualizar em produção:
 
 ```bash
-docker-compose pull backend frontend
-docker-compose up -d
+docker-compose -f infra/docker-compose.yml.prod pull backend frontend
+docker-compose -f infra/docker-compose.yml.prod up -d
 ```
 
 Opcional: crie o secret `GHCR_PAT` se preferir token permanente.

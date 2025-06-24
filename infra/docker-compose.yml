@@ -17,7 +17,7 @@ services:
   backend:
     build:
       context: ../backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: rgps-backend
     depends_on:
       - db
@@ -26,22 +26,28 @@ services:
       PORT: 8080
     ports:
       - "8080:8080"
+    volumes:
+      - ../backend:/app
+      - go-mod:/go/pkg/mod
 
   frontend:
     build:
       context: ../frontend
-      dockerfile: Dockerfile
+      dockerfile: ockerfile.dev
     container_name: rgps-frontend
+
     depends_on:
       - backend
+    environment:
+      - NODE_ENV=development
     ports:
       - "3000:3000"
-    environment:
-      NODE_ENV: development
-
+    volumes:
+      - ../frontend:/app
 
 volumes:
   db_data:
+  go-mod:
 
 networks:
   default:
