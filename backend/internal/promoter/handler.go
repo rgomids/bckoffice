@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -94,6 +95,7 @@ func (h handler) create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Location", "/promoters/"+p.ID)
+	w.Header().Set("X-Entity", fmt.Sprintf("promoters:%s", p.ID))
 	w.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(w).Encode(p)
 }
@@ -138,6 +140,7 @@ func (h handler) update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("X-Entity", fmt.Sprintf("promoters:%s", id))
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -156,5 +159,6 @@ func (h handler) remove(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
+	w.Header().Set("X-Entity", fmt.Sprintf("promoters:%s", id))
 	w.WriteHeader(http.StatusNoContent)
 }

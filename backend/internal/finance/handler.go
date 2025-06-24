@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -65,6 +66,7 @@ func (h handler) markAsPaid(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
+	w.Header().Set("X-Entity", fmt.Sprintf("receivables:%s", id))
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -105,5 +107,6 @@ func (h handler) approveCommission(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
+	w.Header().Set("X-Entity", fmt.Sprintf("commissions:%s", id))
 	w.WriteHeader(http.StatusNoContent)
 }
