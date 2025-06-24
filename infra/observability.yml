@@ -3,7 +3,7 @@ version: "3.9"
 services:
   prometheus:
     image: prom/prometheus:v2.52.0
-    container_name: rcm-prometheus
+    container_name: rgps-prometheus
     volumes:
       - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
@@ -12,7 +12,7 @@ services:
 
   grafana:
     image: grafana/grafana:10.4.2
-    container_name: rcm-grafana
+    container_name: rgps-grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
@@ -24,14 +24,14 @@ services:
 
   node-exporter:
     image: prom/node-exporter:v1.8.1
-    container_name: rcm-node-exporter
+    container_name: rgps-node-exporter
     ports:
       - "9100:9100"
     restart: unless-stopped
 
   postgres-exporter:
     image: quay.io/prometheuscommunity/postgres-exporter:v0.15.0
-    container_name: rcm-postgres-exporter
+    container_name: rgps-postgres-exporter
     environment:
       - DATA_SOURCE_NAME=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
     ports:

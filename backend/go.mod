@@ -1,4 +1,4 @@
-module github.com/smithl4b/rcm.backoffice
+module github.com/rgomids/bckoffice
 
 go 1.23.8
 

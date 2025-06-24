@@ -2,7 +2,7 @@ version: "3.9"
 services:
   backup:
     image: minio/mc
-    container_name: rcm-backup
+    container_name: rgps-backup
     entrypoint: ["/bin/sh","-c","/scripts/pg_dump.sh && crond -f"]
     volumes:
       - ./backup/pg_dump.sh:/scripts/pg_dump.sh:ro

@@ -3,7 +3,7 @@ package auth
 import (
 	"context"
 
-	"github.com/smithl4b/rcm.backoffice/internal/users"
+	"github.com/rgomids/bckoffice/internal/users"
 )
 
 // Repository define operações para consulta de usuários.
