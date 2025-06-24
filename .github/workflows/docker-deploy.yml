@@ -24,13 +24,13 @@ jobs:
           rsync -avz --delete \
             -e "ssh -o StrictHostKeyChecking=no" \
             infra/ \
-            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/opt/rcm-backoffice/infra/
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/opt/rgps-backoffice/infra/
 
       - name: Deploy containers
         run: |
           ssh -o StrictHostKeyChecking=no \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-            "cd /opt/rcm-backoffice/infra && \
+            "cd /opt/rgps-backoffice/infra && \
              docker-compose -f docker-compose.yml.prod pull && \
              docker-compose -f docker-compose.yml.prod up -d --remove-orphans && \
              docker image prune -f"

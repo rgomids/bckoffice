@@ -11,8 +11,8 @@ endif
 
 help:
 	@echo "Targets principais:"
-	@echo "  dev        - docker-compose dev environment"
 	@echo "  prod       - docker-compose production"
+	@echo "  dev        - docker-compose up (build) + logs follow"
 	@echo "  up         - docker-compose up -d (build)"
 	@echo "  down       - docker-compose down"
 	@echo "  logs       - docker-compose logs -f"
@@ -49,7 +49,7 @@ lint:
 build: build-be	build-fe
 migrate-create:
 	docker run --rm \
-		--network rcm.backoffice.network \
+		--network rgps.backoffice.network \
 		-v $(PWD)/migrations:/migrations \
 		--env-file .env \
 		migrate/migrate:4 \
@@ -59,7 +59,7 @@ migrate-create:
 		sudo chown "$(USER)":"$(USER)" -R $(PWD)/migrations
 migrate-up:
 	docker run --rm \
-		--network rcm.backoffice.network \
+		--network rgps.backoffice.network \
 		-v $(PWD)/migrations:/migrations \
 		--env-file .env \
 		migrate/migrate:4 \
@@ -68,7 +68,7 @@ migrate-up:
 		up
 migrate-down:
 	docker run --rm \
-		--network rcm.backoffice.network \
+		--network rgps.backoffice.network \
 		-v $(PWD)/migrations:/migrations \
 		--env-file .env \
 		migrate/migrate:4 \
@@ -77,7 +77,7 @@ migrate-down:
 		down $(mnum)
 migrate-up-force:
 	docker run --rm \
-		--network rcm.backoffice.network \
+		--network rgps.backoffice.network \
 		-v $(PWD)/migrations:/migrations \
 		--env-file .env \
 		migrate/migrate:4 \
@@ -85,7 +85,6 @@ migrate-up-force:
 		-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?sslmode=disable" \
 		force $(version)
 build-be:
-	docker buildx build -t rcm.backoffice/backend:latest -f backend/Dockerfile.prod backend
+	docker buildx build -t rgps.backoffice/backend:latest -f backend/Dockerfile.prod backend
 build-fe:
-	docker buildx build -t rcm.backoffice/frontend:latest -f frontend/Dockerfile.prod frontend
-
+	docker buildx build -t rgps.backoffice/frontend:latest -f frontend/Dockerfile.prod frontend

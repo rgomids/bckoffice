@@ -15,20 +15,21 @@ import (
 	"os"
 
 	_ "github.com/lib/pq"
-	_ "github.com/smithl4b/rcm.backoffice/docs"
+	_ "github.com/rgomids/bckoffice/docs"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/jmoiron/sqlx"
 	httpSwagger "github.com/swaggo/http-swagger"
 
-	"github.com/smithl4b/rcm.backoffice/internal/audit"
-	"github.com/smithl4b/rcm.backoffice/internal/auth"
-	"github.com/smithl4b/rcm.backoffice/internal/contract"
-	"github.com/smithl4b/rcm.backoffice/internal/customer"
-	"github.com/smithl4b/rcm.backoffice/internal/finance"
-	"github.com/smithl4b/rcm.backoffice/internal/promoter"
-	"github.com/smithl4b/rcm.backoffice/internal/service"
+	"github.com/rgomids/bckoffice/internal/audit"
+	"github.com/rgomids/bckoffice/internal/auth"
+	"github.com/rgomids/bckoffice/internal/contract"
+	"github.com/rgomids/bckoffice/internal/customer"
+	"github.com/rgomids/bckoffice/internal/finance"
+	"github.com/rgomids/bckoffice/internal/lead"
+	"github.com/rgomids/bckoffice/internal/promoter"
+	"github.com/rgomids/bckoffice/internal/service"
 )
 
 func main() {
@@ -43,6 +44,7 @@ func main() {
 	customerRepo := customer.NewPostgresRepository(db)
 	serviceRepo := service.NewPostgresRepository(db)
 	promoterRepo := promoter.NewPostgresRepository(db)
+	leadRepo := lead.NewPostgresRepository(db)
 	contractRepo := contract.NewPostgresRepository(db)
 	financeRepo := finance.NewPostgresRepository(db)
 	authRepo := auth.NewPostgresRepository(db)
@@ -76,6 +78,7 @@ func main() {
 
 		service.RegisterRoutes(pr, serviceRepo)
 		promoter.RegisterRoutes(pr, promoterRepo)
+		lead.RegisterRoutes(pr, leadRepo)
 		contract.RegisterRoutes(pr, contractRepo)
 		finance.RegisterRoutes(pr, financeRepo)
 	})

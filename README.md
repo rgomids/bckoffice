@@ -1,4 +1,4 @@
-# RCM Tech — Backoffice
+# bckOffice
 
 Monolito modular que reúne **Go (Chi)** no backend, **Next.js 14 (App Router)** no frontend
 e **PostgreSQL 16** como banco principal. Todo o ciclo de vida roda em **Docker Compose**,
@@ -9,7 +9,7 @@ tanto em desenvolvimento quanto em produção.
 ## Pré-requisitos
 
 - Docker + Docker Compose
-- Go 1.22 (para desenvolvimento backend)
+- Go 1.24 (para desenvolvimento backend)
 - Node 20 (para desenvolvimento frontend)
  - Make (opcional) para atalhos — rode `make help` para listar comandos
 
@@ -22,7 +22,7 @@ docker-compose up -d
 
 * **Frontend**: [http://localhost:3000](http://localhost:3000)
 * **Backend**:  [http://localhost:8080/healthz](http://localhost:8080/healthz)
-* **Postgres**: `postgres://rcm:rcm_pass@localhost:5432/rcm_backoffice`
+* **Postgres**: `postgres://rgps:rgps_pass@localhost:5432/rgps_backoffice`
 
 ## Observabilidade
 
@@ -98,7 +98,7 @@ Opcional: crie o secret `GHCR_PAT` se preferir token permanente.
 
 Crie os secrets `DEPLOY_HOST`, `DEPLOY_USER` e `DEPLOY_SSH_KEY` no GitHub.
 O servidor de destino deve possuir Docker e docker-compose, além do diretório
-`/opt/rcm-backoffice/` com permissão para o usuário configurado.
+`/opt/rgps-backoffice/` com permissão para o usuário configurado.
 
 Ao finalizar o workflow **Build & Push Images** com sucesso, o job
 **Deploy to Production** copia a pasta `infra/` via SSH e reinicia os

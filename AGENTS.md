@@ -2,7 +2,7 @@
 
 > **Objetivo**  
 > Documentar os “agentes” (scripts ou jobs automatizados) que cuidam das rotinas
-> de build, teste, deploy e manutenção do projeto **rcm-backoffice**.  
+> de build, teste, deploy e manutenção do projeto **rgps-backoffice**.  
 > Cada agente é independente, podendo ser invocado manualmente ou via CI.
 
 | Agente | Diretório / entrypoint | Responsabilidade principal |

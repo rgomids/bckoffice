@@ -3,12 +3,12 @@ version: "3.9"
 services:
   db:
     image: postgres:16
-    container_name: rcm-postgres
+    container_name: rgps-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-rcm}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rcm_pass}
-      POSTGRES_DB: ${POSTGRES_DB:-rcm_backoffice}
+      POSTGRES_USER: ${POSTGRES_USER:-rgps}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rgps_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-rgps_backoffice}
     ports:
       - "5432:5432"
     volumes:
@@ -18,11 +18,12 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile.dev
-    container_name: rcm-backend
+    container_name: rgps-backend
     depends_on:
       - db
     environment:
-      - DB_DSN=postgres://${POSTGRES_USER:-rcm}:${POSTGRES_PASSWORD:-rcm_pass}@db:5432/${POSTGRES_DB:-rcm_backoffice}?sslmode=disable
+      DB_DSN: "postgres://${POSTGRES_USER:-rgps}:${POSTGRES_PASSWORD:-rgps_pass}@db:5432/${POSTGRES_DB:-rgps_backoffice}?sslmode=disable"
+      PORT: 8080
     ports:
       - "8080:8080"
     volumes:
@@ -32,8 +33,9 @@ services:
   frontend:
     build:
       context: ../frontend
-      dockerfile: Dockerfile.dev
-    container_name: rcm-frontend
+      dockerfile: ockerfile.dev
+    container_name: rgps-frontend
+
     depends_on:
       - backend
     environment:
@@ -49,4 +51,4 @@ volumes:
 
 networks:
   default:
-    name: rcm.backoffice.network
+    name: rgps.backoffice.network

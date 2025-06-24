@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/smithl4b/rcm.backoffice/internal/auth"
+	"github.com/rgomids/bckoffice/internal/auth"
 )
 
 // RegisterRoutes adiciona as rotas do modulo Finance.

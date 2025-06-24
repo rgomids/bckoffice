@@ -12,7 +12,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/oklog/ulid/v2"
 
-	"github.com/smithl4b/rcm.backoffice/internal/auth"
+	"github.com/rgomids/bckoffice/internal/auth"
 )
 
 // statusRecorder ajuda a capturar o status HTTP retornado.

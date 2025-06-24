@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/smithl4b/rcm.backoffice/internal/users"
+	"github.com/rgomids/bckoffice/internal/users"
 )
 
 // PostgresRepository implementa Repository usando PostgreSQL.

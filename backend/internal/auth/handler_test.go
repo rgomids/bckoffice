@@ -14,7 +14,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/smithl4b/rcm.backoffice/internal/users"
+	"github.com/rgomids/bckoffice/internal/users"
 )
 
 type fakeRepository struct {
