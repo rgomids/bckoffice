@@ -12,7 +12,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - rgps_db_data:/var/lib/postgresql/data
 
   backend:
     build:
@@ -24,6 +24,7 @@ services:
     environment:
       DB_DSN: "postgres://${POSTGRES_USER:-rgps}:${POSTGRES_PASSWORD:-rgps_pass}@db:5432/${POSTGRES_DB:-rgps_backoffice}?sslmode=disable"
       PORT: 8080
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8080:8080"
     volumes:
@@ -35,18 +36,18 @@ services:
       context: ../frontend
       dockerfile: Dockerfile.dev
     container_name: rgps-frontend
-
     depends_on:
       - backend
     environment:
-      - NODE_ENV=development
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     ports:
       - "3000:3000"
     volumes:
       - ../frontend:/app
 
 volumes:
-  db_data:
+  rgps_db_data:
   go-mod:
 
 networks:
