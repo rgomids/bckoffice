@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+: ${MINIO_BUCKET:=rgps-backup}
+
 FILE="$(date +"%Y-%m-%d_%H%M").sql.gz"
 
 echo "[BackupAgent] starting pg_dump to /backup/$FILE"

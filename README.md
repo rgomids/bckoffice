@@ -37,6 +37,8 @@ Acesse:
 ## Backup
 docker-compose -f infra/backup.yml up -d
 
+Console MinIO: <http://localhost:9001> (rgpsadmin / rgpssecret)
+
 ---
 
 ## Estrutura de pastas
