@@ -6,7 +6,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Money from "@/components/Money";
 import Toast from "@/components/Toast";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 import { getToken } from "@/hooks/useAuth";
 
 interface Lead {
@@ -131,27 +131,27 @@ export default function PromoterDashboardPage() {
     <ProtectedRoute roles={["promoter"]}>
       <div className="p-4 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white p-4 shadow">
+          <div className="bg-card p-4 shadow">
             <h2 className="font-semibold mb-2">Leads</h2>
             {loadingLeads ? (
-              <div className="h-5 w-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+              <div className="h-5 w-5 border-2 border-card border-t-transparent rounded-full animate-spin" />
             ) : (
               <div className="flex justify-between">
                 <div>
-                  <p className="text-sm text-gray-500">Abertos</p>
+                  <p className="text-sm text-foreground">Abertos</p>
                   <p className="text-xl font-bold">{leadsOpen}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Proposta</p>
+                  <p className="text-sm text-foreground">Proposta</p>
                   <p className="text-xl font-bold">{leadsProposal}</p>
                 </div>
               </div>
             )}
           </div>
-          <div className="bg-white p-4 shadow">
+          <div className="bg-card p-4 shadow">
             <h2 className="font-semibold mb-2">Comissões Pendentes</h2>
             {loadingComms ? (
-              <div className="h-5 w-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+              <div className="h-5 w-5 border-2 border-card border-t-transparent rounded-full animate-spin" />
             ) : (
               <div className="text-xl font-bold">
                 <Money value={pendingComms} />
@@ -159,16 +159,16 @@ export default function PromoterDashboardPage() {
             )}
           </div>
         </div>
-        <div className="bg-white p-4 shadow">
+        <div className="bg-card p-4 shadow">
           <h2 className="font-semibold mb-2">Contratos Fechados</h2>
           {loadingContracts ? (
             <div className="flex justify-center p-4">
-              <div className="h-5 w-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+              <div className="h-5 w-5 border-2 border-card border-t-transparent rounded-full animate-spin" />
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-card">
+                <thead className="bg-card">
                   <tr>
                     <th className="px-4 py-2 text-left">Cliente</th>
                     <th className="px-4 py-2 text-left">Serviço</th>
@@ -180,7 +180,7 @@ export default function PromoterDashboardPage() {
                   {contractsList.map((c, idx) => (
                     <tr
                       key={c.id}
-                      className={idx % 2 ? "bg-gray-50" : "bg-white"}
+                      className={idx % 2 ? "bg-card" : "bg-card"}
                     >
                       <td className="px-4 py-2">{c.customer?.trade_name}</td>
                       <td className="px-4 py-2">{c.service?.name}</td>
@@ -197,15 +197,15 @@ export default function PromoterDashboardPage() {
             </div>
           )}
         </div>
-        <div className="bg-white p-4 shadow">
+        <div className="bg-card p-4 shadow">
           <div className="flex justify-between items-center mb-2">
             <h2 className="font-semibold">Meus Dados Bancários</h2>
-            <button className="text-blue-600" onClick={() => setModalOpen(true)}>
+            <button className="text-primary" onClick={() => setModalOpen(true)}>
               Editar
             </button>
           </div>
           {loadingProm ? (
-            <div className="h-5 w-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+            <div className="h-5 w-5 border-2 border-card border-t-transparent rounded-full animate-spin" />
           ) : (
             <div className="space-y-1 text-sm">
               <p>PIX: {promoter?.bankAccount?.pix}</p>
@@ -245,7 +245,7 @@ export default function PromoterDashboardPage() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl">
+                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-card shadow-xl">
                   <form onSubmit={submitBank} className="flex flex-col gap-2">
                     <input
                       className="border p-2"
@@ -275,7 +275,7 @@ export default function PromoterDashboardPage() {
                       <button type="button" onClick={closeModal} className="border px-4 py-2">
                         Cancelar
                       </button>
-                      <button type="submit" className="bg-blue-500 text-white px-4 py-2">
+                      <button type="submit" className="bg-primary text-background px-4 py-2">
                         Salvar
                       </button>
                     </div>

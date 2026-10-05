@@ -6,7 +6,7 @@ import useSWR from "swr";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Money from "@/components/Money";
 import Toast from "@/components/Toast";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 import ServiceForm from "./ServiceForm";
 
 interface Service {
@@ -63,18 +63,18 @@ export default function ServicesPage() {
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-bold">Serviços</h1>
-          <button onClick={openForNew} className="bg-blue-500 text-white px-4 py-2">
+          <button onClick={openForNew} className="bg-primary text-background px-4 py-2">
             Novo Serviço
           </button>
         </div>
         {isLoading ? (
           <div className="flex justify-center p-4">
-            <div className="h-5 w-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+            <div className="h-5 w-5 border-2 border-card border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50 sticky top-0">
+            <table className="min-w-full divide-y divide-card">
+              <thead className="bg-card sticky top-0">
                 <tr>
                   <th className="px-4 py-2 text-left">Nome</th>
                   <th className="px-4 py-2 text-left">Descrição</th>
@@ -85,7 +85,7 @@ export default function ServicesPage() {
               </thead>
               <tbody>
                 {data?.map((s, idx) => (
-                  <tr key={s.id} className={idx % 2 ? "bg-gray-50" : "bg-white"}>
+                  <tr key={s.id} className={idx % 2 ? "bg-card" : "bg-card"}>
                     <td className="px-4 py-2">{s.name}</td>
                     <td className="px-4 py-2">{s.description}</td>
                     <td className="px-4 py-2">
@@ -93,8 +93,12 @@ export default function ServicesPage() {
                     </td>
                     <td className="px-4 py-2">{s.isActive ? "Sim" : "Não"}</td>
                     <td className="px-4 py-2 space-x-2">
-                      <button onClick={() => openForEdit(s)}>✏️</button>
-                      <button onClick={() => handleDelete(s.id)}>🗑</button>
+                      <button aria-label="Editar" onClick={() => openForEdit(s)}>
+                        ✏️
+                      </button>
+                      <button aria-label="Remover" onClick={() => handleDelete(s.id)}>
+                        🗑
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -127,7 +131,7 @@ export default function ServicesPage() {
                 leave="ease-in duration-200"
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
-                className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl"
+                className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-card shadow-xl"
               >
                 <ServiceForm service={editing || undefined} onClose={closeModal} onSuccess={handleSuccess} />
               </Transition.Child>

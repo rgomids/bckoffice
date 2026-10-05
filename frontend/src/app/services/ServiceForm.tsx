@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 
 interface Service {
   id: string;
@@ -100,9 +100,9 @@ export default function ServiceForm({ service, onClose, onSuccess }: ServiceForm
         <button type="button" onClick={onClose} className="border px-4 py-2">
           Cancelar
         </button>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2" disabled={loading}>
+        <button type="submit" className="bg-primary text-background px-4 py-2" disabled={loading}>
           {loading ? (
-            <div className="h-4 w-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+            <div className="h-4 w-4 border-2 border-card border-t-transparent rounded-full animate-spin" />
           ) : (
             "Salvar"
           )}

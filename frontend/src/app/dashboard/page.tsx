@@ -21,7 +21,7 @@ export default function DashboardPage() {
       <div className="p-4 space-y-2">
         <div>Dashboard</div>
         {role === "admin" && (
-          <Link href="/audit-logs" className="text-blue-600 hover:underline">
+          <Link href="/audit-logs" className="text-primary hover:underline">
             Audit Logs
           </Link>
         )}

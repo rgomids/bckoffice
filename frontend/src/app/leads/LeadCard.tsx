@@ -16,10 +16,16 @@ export default function LeadCard({ id, customer, service, createdAt }: LeadCardP
     transition,
   };
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="border p-2 bg-white mb-2">
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="border border-card p-2 bg-card mb-2"
+    >
       <div className="font-semibold">{customer.trade_name}</div>
       <div className="text-sm">{service.name}</div>
-      <div className="text-xs text-gray-500">{new Date(createdAt).toLocaleDateString()}</div>
+      <div className="text-xs text-foreground">{new Date(createdAt).toLocaleDateString()}</div>
     </div>
   );
 }

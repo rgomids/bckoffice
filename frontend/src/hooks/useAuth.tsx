@@ -8,14 +8,14 @@ import {
   ReactNode,
 } from "react";
 
-import { apiFetch } from "@/util/api";
+import { api } from "@/lib/api";
 
 interface LoginResponse {
   token: string;
 }
 
 export const login = async (email: string, password: string) => {
-  const data = await apiFetch<LoginResponse>("/login", {
+  const data = await api<LoginResponse>("/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
   });

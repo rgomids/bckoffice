@@ -6,7 +6,7 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import ProtectedRoute from "@/components/ProtectedRoute";
 import LeadCard from "./LeadCard";
 import NewLeadModal from "./NewLeadModal";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 
 interface Lead {
   id: string;
@@ -45,12 +45,12 @@ export default function LeadsPage() {
       <div className="p-4">
         <div className="flex justify-between mb-4">
           <h1 className="text-xl font-bold">Leads</h1>
-          <button onClick={() => setOpen(true)} className="bg-blue-500 text-white px-4 py-2">Novo Lead</button>
+          <button onClick={() => setOpen(true)} className="bg-primary text-background px-4 py-2">Novo Lead</button>
         </div>
         <DndContext onDragEnd={onDragEnd} collisionDetection={closestCenter}>
           <div className="grid grid-cols-4 gap-4">
             <SortableContext items={leadsLead?.map((l) => l.id) || []} strategy={verticalListSortingStrategy} id="lead">
-              <div id="lead" className="bg-gray-100 p-2 min-h-[200px]">
+              <div id="lead" className="bg-card p-2 min-h-[200px]">
                 <h2 className="font-semibold mb-2">Lead</h2>
                 {leadsLead?.map((l) => (
                   <LeadCard key={l.id} id={l.id} customer={l.customer} service={l.service} createdAt={l.createdAt} />
@@ -58,7 +58,7 @@ export default function LeadsPage() {
               </div>
             </SortableContext>
             <SortableContext items={leadsQualified?.map((l) => l.id) || []} strategy={verticalListSortingStrategy} id="qualified">
-              <div id="qualified" className="bg-gray-100 p-2 min-h-[200px]">
+              <div id="qualified" className="bg-card p-2 min-h-[200px]">
                 <h2 className="font-semibold mb-2">Qualified</h2>
                 {leadsQualified?.map((l) => (
                   <LeadCard key={l.id} id={l.id} customer={l.customer} service={l.service} createdAt={l.createdAt} />
@@ -66,7 +66,7 @@ export default function LeadsPage() {
               </div>
             </SortableContext>
             <SortableContext items={leadsProposal?.map((l) => l.id) || []} strategy={verticalListSortingStrategy} id="proposal">
-              <div id="proposal" className="bg-gray-100 p-2 min-h-[200px]">
+              <div id="proposal" className="bg-card p-2 min-h-[200px]">
                 <h2 className="font-semibold mb-2">Proposal</h2>
                 {leadsProposal?.map((l) => (
                   <LeadCard key={l.id} id={l.id} customer={l.customer} service={l.service} createdAt={l.createdAt} />
@@ -74,7 +74,7 @@ export default function LeadsPage() {
               </div>
             </SortableContext>
             <SortableContext items={leadsContract?.map((l) => l.id) || []} strategy={verticalListSortingStrategy} id="contract">
-              <div id="contract" className="bg-gray-100 p-2 min-h-[200px]">
+              <div id="contract" className="bg-card p-2 min-h-[200px]">
                 <h2 className="font-semibold mb-2">Contract</h2>
                 {leadsContract?.map((l) => (
                   <LeadCard key={l.id} id={l.id} customer={l.customer} service={l.service} createdAt={l.createdAt} />

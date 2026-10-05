@@ -1,7 +1,7 @@
 "use client";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, FormEvent, useState, useEffect } from "react";
-import { api } from "@/util/api";
+import { api } from "@/lib/api";
 import { getToken } from "@/hooks/useAuth";
 
 interface ModalProps {
@@ -60,7 +60,7 @@ export default function NewLeadModal({ isOpen, onClose, onSuccess }: ModalProps)
           </Transition.Child>
           <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
           <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
-            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl">
+            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-card shadow-xl">
               <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                 <select className="border p-2" value={customerID} onChange={(e) => setCustomerID(e.target.value)} required>
                   <option value="" disabled>Cliente...</option>
@@ -77,7 +77,7 @@ export default function NewLeadModal({ isOpen, onClose, onSuccess }: ModalProps)
                 <textarea className="border p-2" placeholder="Notas" value={notes} onChange={(e) => setNotes(e.target.value)} />
                 <div className="flex gap-2 mt-2">
                   <button type="button" onClick={onClose} className="border px-4 py-2">Cancelar</button>
-                  <button type="submit" className="bg-blue-500 text-white px-4 py-2">Salvar</button>
+                  <button type="submit" className="bg-primary text-background px-4 py-2">Salvar</button>
                 </div>
               </form>
             </div>
